@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Không có cái gì đâu, bếch...</title>
+<title>Đang tải...</title>
 <style>
   body { font-family: system-ui, sans-serif; max-width: 720px; margin: 30px auto; padding: 0 16px; background:#0f1116; color:#e6e8eb; }
   h1 { color:#fff; margin-bottom:6px; }
@@ -30,7 +30,7 @@
 <div id="resultCard" class="hidden"></div>
 
 <script>
-const WORKER = "https://modgame.phucpro4211.workers.dev";
+const WORKER = "https://automatic.phucpro4211.workers.dev";
 const id = new URLSearchParams(location.search).get("id");
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
