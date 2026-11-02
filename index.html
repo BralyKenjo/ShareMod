@@ -3,105 +3,471 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Modgame Admin</title>
+<title>Admin PANEL</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 24px auto; padding: 0 16px; background:#0f1116; color:#e6e8eb; }
-  h1,h2,h3 { color:#fff; }
-  .card { background:#1a1d24; border:1px solid #2a2f39; border-radius:10px; padding:18px; margin-bottom:16px; }
-  label { display:block; margin:10px 0 4px; font-size:14px; color:#9aa4b2; }
-  input, textarea, select { width:100%; padding:9px 11px; background:#0f1116; border:1px solid #2a2f39; border-radius:6px; color:#e6e8eb; font-family:inherit; font-size:14px; box-sizing:border-box; }
-  textarea { min-height:80px; resize:vertical; font-family:ui-monospace,monospace; }
-  button { padding:10px 18px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; }
-  button:hover { background:#2563eb; }
-  button.danger { background:#dc2626; padding:6px 12px; font-size:13px; }
-  button.danger:hover { background:#b91c1c; }
-  button.ghost { background:#2a2f39; padding:6px 12px; font-size:13px; }
-  button.ghost:hover { background:#374151; }
-  .msg { padding:10px 14px; border-radius:6px; margin:10px 0; font-size:14px; }
-  .msg.err { background:#3b1318; border:1px solid #7f1d1d; color:#fca5a5; }
-  .msg.ok { background:#0f2d1f; border:1px solid #14532d; color:#86efac; }
-  .item { padding:12px; border:1px solid #2a2f39; border-radius:6px; margin-bottom:8px; }
-  .item-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-  .item .id { color:#3b82f6; font-family:ui-monospace,monospace; font-size:13px; }
-  .item .actions { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
-  .hidden { display:none; }
-  code { background:#0f1116; padding:2px 6px; border-radius:4px; font-size:12px; word-break:break-all; }
-  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .tabs { display:flex; gap:8px; margin-bottom:16px; }
-  .tabs button { background:#2a2f39; }
-  .tabs button.active { background:#3b82f6; }
-  .edit-form { background:#0f1116; padding:12px; border-radius:8px; margin-top:12px; }
-  .section-title { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:#6b7280; margin:18px 0 8px; }
+  /* ===== VARIABLES ===== */
+  :root {
+    --bg: #0a0e14;
+    --surface: #121820;
+    --surface-hover: #1a2330;
+    --border: #1f2a3a;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --cyan: #00d4ff;
+    --blue: #0077ff;
+    --red: #dc2626;
+    --green: #00c864;
+    --cyan-glow: rgba(0, 212, 255, 0.25);
+    --radius: 14px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 10%, rgba(0, 119, 255, 0.08), transparent),
+      radial-gradient(ellipse 500px 350px at 80% 90%, rgba(0, 212, 255, 0.06), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== LOGO + HEADER ===== */
+  .logo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  .logo-wrap img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 20px var(--cyan-glow), 0 0 60px rgba(0, 119, 255, 0.15);
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes logoPulse {
+    0%, 100% { box-shadow: 0 0 20px var(--cyan-glow), 0 0 60px rgba(0, 119, 255, 0.15); }
+    50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 119, 255, 0.25); }
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.65rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 60%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.5s ease-out 0.05s both;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.5s ease-out 0.1s both;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease-out 0.15s both;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .card:hover {
+    border-color: rgba(0, 212, 255, 0.22);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.05);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--blue), transparent);
+    opacity: 0.5;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card h2 .icon { color: var(--cyan); font-size: 1rem; }
+
+  /* ===== FORM ===== */
+  label {
+    display: block;
+    margin: 12px 0 6px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  input::placeholder, textarea::placeholder { color: #5a6577; }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.12), 0 0 20px rgba(0, 212, 255, 0.08);
+  }
+
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.82rem;
+  }
+
+  /* ===== BUTTONS ===== */
+  button {
+    padding: 11px 20px;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  button:hover {
+    box-shadow: 0 4px 25px rgba(0, 212, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  button:active { transform: translateY(0) scale(0.99); }
+
+  button.danger {
+    background: linear-gradient(135deg, #b91c1c, var(--red));
+    padding: 7px 14px;
+    font-size: 0.78rem;
+  }
+  button.danger:hover { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.35); }
+
+  button.ghost {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    padding: 7px 14px;
+    font-size: 0.78rem;
+  }
+  button.ghost:hover {
+    background: #232d3d;
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.06);
+  }
+
+  button.loading { pointer-events: none; opacity: 0.75; }
+  button.loading::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== MESSAGES ===== */
+  .msg {
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 12px 0 0;
+    font-size: 0.82rem;
+    animation: shakeIn 0.4s ease-out;
+  }
+  .msg:empty { display: none; }
+  .msg.err {
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    color: #fca5a5;
+  }
+  .msg.ok {
+    background: rgba(0, 200, 100, 0.08);
+    border: 1px solid rgba(0, 200, 100, 0.3);
+    color: #86efac;
+  }
+
+  @keyframes shakeIn {
+    0% { transform: translateX(-8px); opacity: 0; }
+    25% { transform: translateX(8px); }
+    50% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+
+  /* ===== ITEMS ===== */
+  .item {
+    padding: 14px;
+    background: rgba(10, 14, 20, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: border-color var(--transition);
+  }
+  .item:hover { border-color: rgba(0, 212, 255, 0.2); }
+
+  .item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .item .id {
+    color: var(--cyan);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.78rem;
+    padding: 1px 6px;
+    background: rgba(0, 212, 255, 0.08);
+    border-radius: 4px;
+  }
+
+  .item .actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+  .item a { color: var(--cyan); text-decoration: none; font-size: 0.8rem; transition: color var(--transition); }
+  .item a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 5px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    animation: fadeInUp 0.5s ease-out 0.12s both;
+  }
+
+  .tabs button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    box-shadow: none;
+  }
+
+  .tabs button:hover {
+    color: var(--text);
+    background: rgba(0, 212, 255, 0.05);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .tabs button.active {
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.25);
+  }
+
+  /* ===== UTILITIES ===== */
+  .hidden { display: none !important; }
+  code {
+    background: var(--bg);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    word-break: break-all;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    color: var(--cyan);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+  }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .edit-form {
+    background: rgba(10, 14, 20, 0.6);
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 14px;
+    border: 1px solid var(--border);
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6b7280;
+    margin: 18px 0 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .section-title::before {
+    content: '';
+    width: 3px;
+    height: 12px;
+    background: linear-gradient(180deg, var(--cyan), var(--blue));
+    border-radius: 2px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 520px) {
+    body { padding: 24px 12px 40px; }
+    h1 { font-size: 1.35rem; }
+    .row2 { grid-template-columns: 1fr; }
+    .card { padding: 18px 14px; }
+    .item-head { flex-direction: column; align-items: flex-start; }
+  }
 </style>
 </head>
 <body>
 
-<h1>Modgame Admin</h1>
+<div class="container">
 
-<div class="card" id="loginCard">
-  <h2>Đăng nhập</h2>
-  <input type="password" id="adminPw" placeholder="Mật khẩu admin">
-  <div style="margin-top:12px"><button onclick="login()">Đăng nhập</button></div>
-  <div id="loginMsg"></div>
-</div>
+  <div class="logo-wrap">
+    <img src="assets/logo.jpeg" alt="Logo" onerror="this.style.display='none'">
+  </div>
+  <h1>Modgame Admin</h1>
+  <p class="subtitle">Quản lý video, mật khẩu và nội dung</p>
 
-<div class="hidden" id="mainPanel">
-
-  <div class="tabs">
-    <button id="tabVideo" class="active" onclick="switchTab('video')">Video</button>
-    <button id="tabPw" onclick="switchTab('pw')">Mật khẩu</button>
+  <div class="card" id="loginCard">
+    <h2><span class="icon">🔒</span> Đăng nhập</h2>
+    <label>Mật khẩu admin</label>
+    <input type="password" id="adminPw" placeholder="Nhập mật khẩu admin" autocomplete="current-password">
+    <div style="margin-top:14px"><button onclick="login()" id="loginBtn">Đăng nhập</button></div>
+    <div id="loginMsg"></div>
   </div>
 
-  <div id="tabVideoContent">
-    <div class="card">
-      <h2>Tạo video mới</h2>
-      <label>Tiêu đề</label>
-      <input id="fTitle" placeholder="ChilliHub V7" oninput="syncId()">
-      <label>ID (URL: view.html?id=...)</label>
-      <input id="fId" placeholder="chillihubv7" pattern="[a-z0-9_-]+">
+  <div class="hidden" id="mainPanel">
 
-      <div class="section-title">Link rút gọn (để trống ô nào thì nút đó ẩn)</div>
-      <div class="row2">
-        <input id="fL1" placeholder="Link4M">
-        <input id="fL2" placeholder="Bumx">
-        <input id="fL3" placeholder="Bbmkts">
-        <input id="fL4" placeholder="LinkForEarn">
+    <div class="tabs">
+      <button id="tabVideo" class="active" onclick="switchTab('video')">📹 Video</button>
+      <button id="tabPw" onclick="switchTab('pw')">🔑 Mật khẩu</button>
+    </div>
+
+    <div id="tabVideoContent">
+      <div class="card">
+        <h2><span class="icon">➕</span> Tạo video mới</h2>
+        <label>Tiêu đề</label>
+        <input id="fTitle" placeholder="ChilliHub V7" oninput="syncId()">
+        <label>ID (URL: view.html?id=...)</label>
+        <input id="fId" placeholder="chillihubv7" pattern="[a-z0-9_-]+">
+
+        <div class="section-title">Link rút gọn (để trống ô nào thì nút đó ẩn)</div>
+        <div class="row2">
+          <input id="fL1" placeholder="Link4M">
+          <input id="fL2" placeholder="Bumx">
+          <input id="fL3" placeholder="Bbmkts">
+          <input id="fL4" placeholder="LinkForEarn">
+        </div>
+
+        <div class="section-title">Nội dung</div>
+        <label>Loại</label>
+        <select id="fType">
+          <option value="script">Script (hiện code)</option>
+          <option value="link">Link gốc (hiện nút mở tab)</option>
+        </select>
+        <label>Nội dung</label>
+        <textarea id="fContent" placeholder="loadstring(...) hoặc https://..."></textarea>
+
+        <div style="margin-top:16px"><button onclick="createVideo()" id="createBtn">Tạo</button></div>
+        <div id="formMsg"></div>
       </div>
 
-      <div class="section-title">Nội dung</div>
-      <label>Loại</label>
-      <select id="fType">
-        <option value="script">Script (hiện code)</option>
-        <option value="link">Link gốc (hiện nút mở tab)</option>
-      </select>
-      <label>Nội dung</label>
-      <textarea id="fContent" placeholder="loadstring(...) hoặc https://..."></textarea>
-
-      <div style="margin-top:14px"><button onclick="createVideo()">Tạo</button></div>
-      <div id="formMsg"></div>
+      <div class="card">
+        <h2><span class="icon">📋</span> Video đã tạo</h2>
+        <div id="listBox"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Video đã tạo</h2>
-      <div id="listBox"></div>
-    </div>
-  </div>
+    <div id="tabPwContent" class="hidden">
+      <div class="card">
+        <h2><span class="icon">➕</span> Thêm mật khẩu tạm</h2>
+        <label>Mật khẩu</label>
+        <input id="pPw" placeholder="banthang11">
+        <label>Hạn sử dụng</label>
+        <input id="pExpiry" type="datetime-local">
+        <div style="margin-top:16px"><button onclick="addPassword()" id="addPwBtn">Thêm</button></div>
+        <div id="pwFormMsg"></div>
+      </div>
 
-  <div id="tabPwContent" class="hidden">
-    <div class="card">
-      <h2>Thêm mật khẩu tạm</h2>
-      <label>Mật khẩu</label>
-      <input id="pPw" placeholder="banthang11">
-      <label>Hạn sử dụng</label>
-      <input id="pExpiry" type="datetime-local">
-      <div style="margin-top:14px"><button onclick="addPassword()">Thêm</button></div>
-      <div id="pwFormMsg"></div>
+      <div class="card">
+        <h2><span class="icon">🔑</span> Danh sách mật khẩu</h2>
+        <div id="pwListBox"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Danh sách mật khẩu</h2>
-      <div id="pwListBox"></div>
-    </div>
   </div>
 
 </div>
@@ -128,16 +494,25 @@ async function checkAdmin(pw) {
 async function login() {
   const pw = document.getElementById("adminPw").value;
   const m = document.getElementById("loginMsg");
+  const btn = document.getElementById("loginBtn");
   m.innerHTML = "";
+  btn.classList.add("loading");
+  btn.disabled = true;
   try {
     const r = await fetch(WORKER + "/api/admin-check", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ password: pw })
     });
+    btn.classList.remove("loading");
+    btn.disabled = false;
     if (!r.ok) { m.innerHTML = '<div class="msg err">Sai mật khẩu</div>'; return; }
     adminPw = pw; sessionStorage.setItem("adminPw", pw);
     unlock();
-  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+  } catch {
+    btn.classList.remove("loading");
+    btn.disabled = false;
+    m.innerHTML = '<div class="msg err">Lỗi kết nối</div>';
+  }
 }
 
 function unlock() {
@@ -167,6 +542,7 @@ function resetCreateForm() {
 
 async function createVideo() {
   const m = document.getElementById("formMsg");
+  const btn = document.getElementById("createBtn");
   m.innerHTML = "";
   const id = document.getElementById("fId").value.trim();
   const title = document.getElementById("fTitle").value.trim();
@@ -180,17 +556,25 @@ async function createVideo() {
   };
   if (!id || !title || !content) { m.innerHTML = '<div class="msg err">Thiếu trường</div>'; return; }
   if (!/^[a-z0-9_-]+$/.test(id)) { m.innerHTML = '<div class="msg err">ID chỉ a-z, 0-9, _, -</div>'; return; }
+  btn.classList.add("loading");
+  btn.disabled = true;
   try {
     const r = await fetch(WORKER + "/api/create", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ adminPassword: adminPw, id, title, links, type, content })
     });
     const d = await r.json();
+    btn.classList.remove("loading");
+    btn.disabled = false;
     if (!r.ok) { m.innerHTML = `<div class="msg err">${d.error}</div>`; return; }
     m.innerHTML = '<div class="msg ok">Đã tạo video</div>';
     resetCreateForm();
     loadList();
-  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+  } catch {
+    btn.classList.remove("loading");
+    btn.disabled = false;
+    m.innerHTML = '<div class="msg err">Lỗi kết nối</div>';
+  }
 }
 
 async function loadList() {
@@ -198,7 +582,7 @@ async function loadList() {
   try {
     const r = await fetch(WORKER + "/api/list");
     const { items } = await r.json();
-    if (!items.length) { box.innerHTML = '<p style="color:#9aa4b2">Chưa có video nào.</p>'; return; }
+    if (!items.length) { box.innerHTML = '<p style="color:#9aa4b2;text-align:center;padding:20px 0;font-size:0.85rem">Chưa có video nào.</p>'; return; }
     const base = location.origin + location.pathname.replace(/index\.html$/,"");
     box.innerHTML = items.map(v => `
       <div class="item">
@@ -206,15 +590,15 @@ async function loadList() {
           <div>
             <b>${escapeHtml(v.title)}</b> &middot;
             <span class="id">${v.id}</span> &middot;
-            <span style="font-size:12px;color:${v.hasLinks ? '#86efac' : '#fca5a5'}">
-              ${v.hasLinks ? 'có links' : 'chưa có links'}
+            <span style="font-size:0.72rem;color:${v.hasLinks ? '#86efac' : '#fca5a5'}">
+              ${v.hasLinks ? '● có links' : '○ chưa có links'}
             </span> &middot;
-            <span style="font-size:12px;color:#9aa4b2">${v.type}</span>
+            <span style="font-size:0.72rem;color:#9aa4b2">${v.type}</span>
           </div>
           <div class="actions">
             <button class="ghost" onclick="toggleEdit('${v.id}')">Sửa</button>
             <button class="danger" onclick="deleteVideo('${v.id}')">Xóa</button>
-            <a href="${base}view.html?id=${v.id}" target="_blank" style="color:#3b82f6;font-size:13px">Xem</a>
+            <a href="${base}view.html?id=${v.id}" target="_blank">Xem ↗</a>
           </div>
         </div>
         <div id="edit-${v.id}" class="edit-form hidden"></div>
@@ -242,7 +626,7 @@ async function toggleEdit(id) {
       <input id="eL3-${id}" placeholder="Bbmkts" value="${escapeHtml(links.bbmkts || "")}">
       <input id="eL4-${id}" placeholder="LinkForEarn" value="${escapeHtml(links.linkforearn || "")}">
     </div>
-    <div style="margin-top:12px;display:flex;gap:8px">
+    <div style="margin-top:14px;display:flex;gap:8px">
       <button onclick="saveEdit('${id}')">Lưu</button>
       <button class="ghost" onclick="toggleEdit('${id}')">Hủy</button>
     </div>
@@ -293,14 +677,14 @@ async function loadPasswords() {
       body: JSON.stringify({ adminPassword: adminPw })
     });
     const { passwords } = await r.json();
-    if (!passwords || !passwords.length) { box.innerHTML = '<p style="color:#9aa4b2">Chưa có mật khẩu nào.</p>'; return; }
+    if (!passwords || !passwords.length) { box.innerHTML = '<p style="color:#9aa4b2;text-align:center;padding:20px 0;font-size:0.85rem">Chưa có mật khẩu nào.</p>'; return; }
     box.innerHTML = passwords.map(p => `
       <div class="item">
         <div class="item-head">
           <div>
             <code>${escapeHtml(p.password)}</code><br>
-            <span style="font-size:12px;color:${p.expired ? '#fca5a5' : '#86efac'}">
-              ${p.expired ? 'Đã hết hạn' : 'Hết hạn'}: ${new Date(p.expiry).toLocaleString('vi-VN')}
+            <span style="font-size:0.75rem;color:${p.expired ? '#fca5a5' : '#86efac'};display:inline-block;margin-top:6px">
+              ${p.expired ? '● Đã hết hạn' : '○ Hết hạn'}: ${new Date(p.expiry).toLocaleString('vi-VN')}
             </span>
           </div>
           <button class="danger" onclick="deletePassword('${escapeHtml(p.password).replace(/'/g,"\\'")}')">Xóa</button>
@@ -312,24 +696,33 @@ async function loadPasswords() {
 
 async function addPassword() {
   const m = document.getElementById("pwFormMsg");
+  const btn = document.getElementById("addPwBtn");
   m.innerHTML = "";
   const password = document.getElementById("pPw").value.trim();
   const dt = document.getElementById("pExpiry").value;
   if (!password || !dt) { m.innerHTML = '<div class="msg err">Thiếu trường</div>'; return; }
   const expiry = new Date(dt).getTime();
   if (expiry < Date.now()) { m.innerHTML = '<div class="msg err">Hạn phải ở tương lai</div>'; return; }
+  btn.classList.add("loading");
+  btn.disabled = true;
   try {
     const r = await fetch(WORKER + "/api/password/add", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ adminPassword: adminPw, password, expiry })
     });
     const d = await r.json();
+    btn.classList.remove("loading");
+    btn.disabled = false;
     if (!r.ok) { m.innerHTML = `<div class="msg err">${d.error}</div>`; return; }
     m.innerHTML = '<div class="msg ok">Đã thêm</div>';
     document.getElementById("pPw").value = "";
     document.getElementById("pExpiry").value = "";
     loadPasswords();
-  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+  } catch {
+    btn.classList.remove("loading");
+    btn.disabled = false;
+    m.innerHTML = '<div class="msg err">Lỗi kết nối</div>';
+  }
 }
 
 async function deletePassword(password) {
