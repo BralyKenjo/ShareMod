@@ -3,153 +3,347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Đang tải...</title>
+<title>Modgame Admin</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 30px auto; padding: 0 16px; background:#0f1116; color:#e6e8eb; }
-  h1 { color:#fff; margin-bottom:6px; }
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 24px auto; padding: 0 16px; background:#0f1116; color:#e6e8eb; }
+  h1,h2,h3 { color:#fff; }
   .card { background:#1a1d24; border:1px solid #2a2f39; border-radius:10px; padding:18px; margin-bottom:16px; }
-  button { padding:11px 18px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; width:100%; margin-top:8px; }
+  label { display:block; margin:10px 0 4px; font-size:14px; color:#9aa4b2; }
+  input, textarea, select { width:100%; padding:9px 11px; background:#0f1116; border:1px solid #2a2f39; border-radius:6px; color:#e6e8eb; font-family:inherit; font-size:14px; box-sizing:border-box; }
+  textarea { min-height:80px; resize:vertical; font-family:ui-monospace,monospace; }
+  button { padding:10px 18px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; }
   button:hover { background:#2563eb; }
-  button.alt { background:#4b5563; }
-  button.alt:hover { background:#374151; }
-  input[type=password] { width:100%; padding:9px 11px; background:#0f1116; border:1px solid #2a2f39; border-radius:6px; color:#e6e8eb; font-size:14px; box-sizing:border-box; margin-top:8px; }
-  pre { background:#0f1116; border:1px solid #2a2f39; border-radius:8px; padding:14px; overflow:auto; font-size:13px; white-space:pre-wrap; word-break:break-all; max-height:60vh; }
+  button.danger { background:#dc2626; padding:6px 12px; font-size:13px; }
+  button.danger:hover { background:#b91c1c; }
+  button.ghost { background:#2a2f39; padding:6px 12px; font-size:13px; }
+  button.ghost:hover { background:#374151; }
   .msg { padding:10px 14px; border-radius:6px; margin:10px 0; font-size:14px; }
   .msg.err { background:#3b1318; border:1px solid #7f1d1d; color:#fca5a5; }
-  label.remember { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:14px; color:#9aa4b2; cursor:pointer; }
+  .msg.ok { background:#0f2d1f; border:1px solid #14532d; color:#86efac; }
+  .item { padding:12px; border:1px solid #2a2f39; border-radius:6px; margin-bottom:8px; }
+  .item-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .item .id { color:#3b82f6; font-family:ui-monospace,monospace; font-size:13px; }
+  .item .actions { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
   .hidden { display:none; }
-  a.open-link { display:inline-block; padding:11px 18px; background:#3b82f6; color:#fff; border-radius:6px; text-decoration:none; font-size:14px; margin-top:8px; }
-  .desc { color:#9aa4b2; font-size:13px; margin-top:4px; }
+  code { background:#0f1116; padding:2px 6px; border-radius:4px; font-size:12px; word-break:break-all; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .tabs { display:flex; gap:8px; margin-bottom:16px; }
+  .tabs button { background:#2a2f39; }
+  .tabs button.active { background:#3b82f6; }
+  .edit-form { background:#0f1116; padding:12px; border-radius:8px; margin-top:12px; }
+  .section-title { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:#6b7280; margin:18px 0 8px; }
 </style>
 </head>
 <body>
 
-<h1 id="title">Đang tải...</h1>
+<h1>Modgame Admin</h1>
 
-<div id="mainCard"></div>
-<div id="resultCard" class="hidden"></div>
+<div class="card" id="loginCard">
+  <h2>Đăng nhập</h2>
+  <input type="password" id="adminPw" placeholder="Mật khẩu admin">
+  <div style="margin-top:12px"><button onclick="login()">Đăng nhập</button></div>
+  <div id="loginMsg"></div>
+</div>
+
+<div class="hidden" id="mainPanel">
+
+  <div class="tabs">
+    <button id="tabVideo" class="active" onclick="switchTab('video')">Video</button>
+    <button id="tabPw" onclick="switchTab('pw')">Mật khẩu</button>
+  </div>
+
+  <div id="tabVideoContent">
+    <div class="card">
+      <h2>Tạo video mới</h2>
+      <label>Tiêu đề</label>
+      <input id="fTitle" placeholder="ChilliHub V7" oninput="syncId()">
+      <label>ID (URL: view.html?id=...)</label>
+      <input id="fId" placeholder="chillihubv7" pattern="[a-z0-9_-]+">
+
+      <div class="section-title">Link rút gọn (để trống ô nào thì nút đó ẩn)</div>
+      <div class="row2">
+        <input id="fL1" placeholder="Link4M">
+        <input id="fL2" placeholder="Bumx">
+        <input id="fL3" placeholder="Bbmkts">
+        <input id="fL4" placeholder="LinkForEarn">
+      </div>
+
+      <div class="section-title">Nội dung</div>
+      <label>Loại</label>
+      <select id="fType">
+        <option value="script">Script (hiện code)</option>
+        <option value="link">Link gốc (hiện nút mở tab)</option>
+      </select>
+      <label>Nội dung</label>
+      <textarea id="fContent" placeholder="loadstring(...) hoặc https://..."></textarea>
+
+      <div style="margin-top:14px"><button onclick="createVideo()">Tạo</button></div>
+      <div id="formMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2>Video đã tạo</h2>
+      <div id="listBox"></div>
+    </div>
+  </div>
+
+  <div id="tabPwContent" class="hidden">
+    <div class="card">
+      <h2>Thêm mật khẩu tạm</h2>
+      <label>Mật khẩu</label>
+      <input id="pPw" placeholder="banthang11">
+      <label>Hạn sử dụng</label>
+      <input id="pExpiry" type="datetime-local">
+      <div style="margin-top:14px"><button onclick="addPassword()">Thêm</button></div>
+      <div id="pwFormMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2>Danh sách mật khẩu</h2>
+      <div id="pwListBox"></div>
+    </div>
+  </div>
+
+</div>
 
 <script>
 const WORKER = "https://automatic.phucpro4211.workers.dev";
-const id = new URLSearchParams(location.search).get("id");
+let adminPw = sessionStorage.getItem("adminPw") || "";
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (adminPw) checkAdmin(adminPw);
+});
+
+async function checkAdmin(pw) {
+  try {
+    const r = await fetch(WORKER + "/api/admin-check", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ password: pw })
+    });
+    if (r.ok) { adminPw = pw; unlock(); }
+    else { sessionStorage.removeItem("adminPw"); adminPw = ""; }
+  } catch {}
+}
+
+async function login() {
+  const pw = document.getElementById("adminPw").value;
+  const m = document.getElementById("loginMsg");
+  m.innerHTML = "";
+  try {
+    const r = await fetch(WORKER + "/api/admin-check", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ password: pw })
+    });
+    if (!r.ok) { m.innerHTML = '<div class="msg err">Sai mật khẩu</div>'; return; }
+    adminPw = pw; sessionStorage.setItem("adminPw", pw);
+    unlock();
+  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+}
+
+function unlock() {
+  document.getElementById("loginCard").classList.add("hidden");
+  document.getElementById("mainPanel").classList.remove("hidden");
+  loadList();
+  loadPasswords();
+}
+
+function switchTab(tab) {
+  document.getElementById("tabVideo").classList.toggle("active", tab === "video");
+  document.getElementById("tabPw").classList.toggle("active", tab === "pw");
+  document.getElementById("tabVideoContent").classList.toggle("hidden", tab !== "video");
+  document.getElementById("tabPwContent").classList.toggle("hidden", tab !== "pw");
+}
+
+function slug(s) {
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/đ/g,"d").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40);
+}
+function syncId() { document.getElementById("fId").value = slug(document.getElementById("fTitle").value); }
+
+function resetCreateForm() {
+  ["fTitle","fId","fContent","fL1","fL2","fL3","fL4"].forEach(x => document.getElementById(x).value = "");
+  document.getElementById("fType").value = "script";
+}
+
+async function createVideo() {
+  const m = document.getElementById("formMsg");
+  m.innerHTML = "";
+  const id = document.getElementById("fId").value.trim();
+  const title = document.getElementById("fTitle").value.trim();
+  const type = document.getElementById("fType").value;
+  const content = document.getElementById("fContent").value.trim();
+  const links = {
+    link4m:      document.getElementById("fL1").value.trim(),
+    bumx:        document.getElementById("fL2").value.trim(),
+    bbmkts:      document.getElementById("fL3").value.trim(),
+    linkforearn: document.getElementById("fL4").value.trim()
+  };
+  if (!id || !title || !content) { m.innerHTML = '<div class="msg err">Thiếu trường</div>'; return; }
+  if (!/^[a-z0-9_-]+$/.test(id)) { m.innerHTML = '<div class="msg err">ID chỉ a-z, 0-9, _, -</div>'; return; }
+  try {
+    const r = await fetch(WORKER + "/api/create", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ adminPassword: adminPw, id, title, links, type, content })
+    });
+    const d = await r.json();
+    if (!r.ok) { m.innerHTML = `<div class="msg err">${d.error}</div>`; return; }
+    m.innerHTML = '<div class="msg ok">Đã tạo video</div>';
+    resetCreateForm();
+    loadList();
+  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+}
+
+async function loadList() {
+  const box = document.getElementById("listBox");
+  try {
+    const r = await fetch(WORKER + "/api/list");
+    const { items } = await r.json();
+    if (!items.length) { box.innerHTML = '<p style="color:#9aa4b2">Chưa có video nào.</p>'; return; }
+    const base = location.origin + location.pathname.replace(/index\.html$/,"");
+    box.innerHTML = items.map(v => `
+      <div class="item">
+        <div class="item-head">
+          <div>
+            <b>${escapeHtml(v.title)}</b> &middot;
+            <span class="id">${v.id}</span> &middot;
+            <span style="font-size:12px;color:${v.hasLinks ? '#86efac' : '#fca5a5'}">
+              ${v.hasLinks ? 'có links' : 'chưa có links'}
+            </span> &middot;
+            <span style="font-size:12px;color:#9aa4b2">${v.type}</span>
+          </div>
+          <div class="actions">
+            <button class="ghost" onclick="toggleEdit('${v.id}')">Sửa</button>
+            <button class="danger" onclick="deleteVideo('${v.id}')">Xóa</button>
+            <a href="${base}view.html?id=${v.id}" target="_blank" style="color:#3b82f6;font-size:13px">Xem</a>
+          </div>
+        </div>
+        <div id="edit-${v.id}" class="edit-form hidden"></div>
+      </div>
+    `).join("");
+  } catch { box.innerHTML = '<div class="msg err">Không tải được</div>'; }
+}
+
+async function toggleEdit(id) {
+  const box = document.getElementById("edit-" + id);
+  if (!box.classList.contains("hidden")) { box.classList.add("hidden"); return; }
+
+  const r = await fetch(WORKER + "/api/info/" + id);
+  const info = await r.json();
+  const links = info.links || {};
+
+  box.innerHTML = `
+    <div class="section-title">Sửa video <span class="id">${id}</span></div>
+    <label>Tiêu đề</label>
+    <input id="eTitle-${id}" value="${escapeHtml(info.title)}">
+    <div class="section-title">4 link rút gọn</div>
+    <div class="row2">
+      <input id="eL1-${id}" placeholder="Link4M" value="${escapeHtml(links.link4m || "")}">
+      <input id="eL2-${id}" placeholder="Bumx" value="${escapeHtml(links.bumx || "")}">
+      <input id="eL3-${id}" placeholder="Bbmkts" value="${escapeHtml(links.bbmkts || "")}">
+      <input id="eL4-${id}" placeholder="LinkForEarn" value="${escapeHtml(links.linkforearn || "")}">
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button onclick="saveEdit('${id}')">Lưu</button>
+      <button class="ghost" onclick="toggleEdit('${id}')">Hủy</button>
+    </div>
+    <div id="editMsg-${id}"></div>
+  `;
+  box.classList.remove("hidden");
+}
+
+async function saveEdit(id) {
+  const m = document.getElementById("editMsg-" + id);
+  m.innerHTML = "";
+  const title = document.getElementById("eTitle-" + id).value.trim();
+  const links = {
+    link4m:      document.getElementById("eL1-" + id).value.trim(),
+    bumx:        document.getElementById("eL2-" + id).value.trim(),
+    bbmkts:      document.getElementById("eL3-" + id).value.trim(),
+    linkforearn: document.getElementById("eL4-" + id).value.trim()
+  };
+  try {
+    const r = await fetch(WORKER + "/api/update-video", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ adminPassword: adminPw, id, title, links })
+    });
+    const d = await r.json();
+    if (!r.ok) { m.innerHTML = `<div class="msg err">${d.error}</div>`; return; }
+    m.innerHTML = '<div class="msg ok">Đã lưu</div>';
+    loadList();
+  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+}
+
+async function deleteVideo(id) {
+  if (!confirm(`Xóa video "${id}"? Không hoàn tác được.`)) return;
+  try {
+    const r = await fetch(WORKER + "/api/delete-video", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ adminPassword: adminPw, id })
+    });
+    if (r.ok) loadList();
+    else alert("Lỗi xóa");
+  } catch { alert("Lỗi kết nối"); }
+}
+
+async function loadPasswords() {
+  const box = document.getElementById("pwListBox");
+  try {
+    const r = await fetch(WORKER + "/api/password/list", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ adminPassword: adminPw })
+    });
+    const { passwords } = await r.json();
+    if (!passwords || !passwords.length) { box.innerHTML = '<p style="color:#9aa4b2">Chưa có mật khẩu nào.</p>'; return; }
+    box.innerHTML = passwords.map(p => `
+      <div class="item">
+        <div class="item-head">
+          <div>
+            <code>${escapeHtml(p.password)}</code><br>
+            <span style="font-size:12px;color:${p.expired ? '#fca5a5' : '#86efac'}">
+              ${p.expired ? 'Đã hết hạn' : 'Hết hạn'}: ${new Date(p.expiry).toLocaleString('vi-VN')}
+            </span>
+          </div>
+          <button class="danger" onclick="deletePassword('${escapeHtml(p.password).replace(/'/g,"\\'")}')">Xóa</button>
+        </div>
+      </div>
+    `).join("");
+  } catch { box.innerHTML = '<div class="msg err">Không tải được</div>'; }
+}
+
+async function addPassword() {
+  const m = document.getElementById("pwFormMsg");
+  m.innerHTML = "";
+  const password = document.getElementById("pPw").value.trim();
+  const dt = document.getElementById("pExpiry").value;
+  if (!password || !dt) { m.innerHTML = '<div class="msg err">Thiếu trường</div>'; return; }
+  const expiry = new Date(dt).getTime();
+  if (expiry < Date.now()) { m.innerHTML = '<div class="msg err">Hạn phải ở tương lai</div>'; return; }
+  try {
+    const r = await fetch(WORKER + "/api/password/add", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ adminPassword: adminPw, password, expiry })
+    });
+    const d = await r.json();
+    if (!r.ok) { m.innerHTML = `<div class="msg err">${d.error}</div>`; return; }
+    m.innerHTML = '<div class="msg ok">Đã thêm</div>';
+    document.getElementById("pPw").value = "";
+    document.getElementById("pExpiry").value = "";
+    loadPasswords();
+  } catch { m.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+}
+
+async function deletePassword(password) {
+  if (!confirm(`Xóa mật khẩu "${password}"?`)) return;
+  try {
+    await fetch(WORKER + "/api/password/delete", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ adminPassword: adminPw, password })
+    });
+    loadPasswords();
+  } catch {}
+}
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-
-async function main() {
-  if (!id) { document.getElementById("title").textContent = "Thiếu ID"; return; }
-
-  const saved = localStorage.getItem("token_" + id);
-  if (saved) {
-    try {
-      const r = await fetch(WORKER + "/api/reveal", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ token: saved })
-      });
-      const data = await r.json();
-      if (data.success) { reveal(data); return; }
-      localStorage.removeItem("token_" + id);
-    } catch {}
-  }
-
-  try {
-    const r = await fetch(WORKER + "/api/info/" + id);
-    if (!r.ok) {
-      document.getElementById("title").textContent = "Không tìm thấy";
-      document.getElementById("mainCard").innerHTML = '<div class="msg err">ID không tồn tại.</div>';
-      return;
-    }
-    const info = await r.json();
-    document.title = info.title;
-    document.getElementById("title").textContent = info.title;
-    showMain(info.links || {});
-  } catch {
-    document.getElementById("mainCard").innerHTML = '<div class="msg err">Lỗi kết nối</div>';
-  }
-}
-
-function showMain(links) {
-  const labels = {
-    link4m:      "Link4M (khuyên dùng)",
-    bumx:        "Bumx (nhanh nhất)",
-    bbmkts:      "Bbmkts (dự phòng)",
-    linkforearn: "LinkForEarn (dự phòng)"
-  };
-  const linkBtns = Object.entries(labels).map(([k, label]) => {
-    const u = links[k];
-    return u ? `<button onclick="window.open('${escapeHtml(u)}','_blank')">${label}</button>` : "";
-  }).join("");
-
-  document.getElementById("mainCard").innerHTML = `
-    <div class="card">
-      <h2 style="margin-top:0;color:#fff">Lấy script</h2>
-      <p class="desc">Chọn 1 trong các link dưới để vượt quảng cáo:</p>
-      ${linkBtns || '<p class="desc">Video này chưa có link shortener.</p>'}
-    </div>
-    <div class="card">
-      <h2 style="margin-top:0;color:#fff">Hoặc dùng mật khẩu</h2>
-      <input type="password" id="pw" placeholder="Nhập mật khẩu để lấy ngay">
-      <label class="remember"><input type="checkbox" id="remember"> Lưu cho lần sau</label>
-      <button onclick="doVerify()">Xác minh</button>
-      <div id="pwMsg"></div>
-    </div>
-  `;
-}
-
-async function doVerify() {
-  const pw = document.getElementById("pw").value;
-  const remember = document.getElementById("remember").checked;
-  const msg = document.getElementById("pwMsg");
-  msg.innerHTML = "";
-  if (!pw) return;
-  try {
-    const r = await fetch(WORKER + "/api/verify", {
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ id, password: pw })
-    });
-    const data = await r.json();
-    if (!r.ok) { msg.innerHTML = `<div class="msg err">${data.error || "sai mật khẩu"}</div>`; return; }
-    if (remember && data.token) localStorage.setItem("token_" + id, data.token);
-    reveal(data);
-  } catch { msg.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
-}
-
-function reveal(data) {
-  document.getElementById("mainCard").classList.add("hidden");
-  const rc = document.getElementById("resultCard");
-  rc.classList.remove("hidden");
-
-  if (data.type === "script") {
-    rc.innerHTML = `
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h2 style="margin:0;color:#fff">Script</h2>
-          <button class="alt" style="width:auto;padding:8px 14px" onclick="copyScript()">Sao chép</button>
-        </div>
-        <pre id="scriptBox">${escapeHtml(data.content)}</pre>
-      </div>
-    `;
-  } else {
-    rc.innerHTML = `
-      <div class="card">
-        <h2 style="margin-top:0;color:#fff">Link gốc</h2>
-        <p class="desc">Bấm nút để mở trong tab mới:</p>
-        <a class="open-link" href="${escapeHtml(data.content)}" target="_blank" rel="noopener">Mở link gốc</a>
-      </div>
-    `;
-  }
-}
-
-function copyScript() {
-  const el = document.getElementById("scriptBox");
-  const text = el.textContent;
-  navigator.clipboard.writeText(text).catch(() => {
-    const r = document.createRange(); r.selectNode(el);
-    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
-    document.execCommand("copy");
-  });
-}
-
-main();
 </script>
 </body>
 </html>
