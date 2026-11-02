@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🎫 Thanh toán bằng thẻ cào</title>
+<style>
+  :root{
+    --bg:#0b0f19;
+    --surface:#111827;
+    --border:rgba(255,255,255,.08);
+    --text:#f9fafb;
+    --muted:#9ca3af;
+    --accent:#3b82f6;
+    --accent-2:#8b5cf6;
+    --success:#22c55e;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+    --radius:18px;
+    --shadow:0 20px 50px rgba(0,0,0,.45);
+    --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:var(--font);
+    background:
+      radial-gradient(ellipse at 10% 5%,rgba(59,130,246,.18),transparent 55%),
+      radial-gradient(ellipse at 90% 10%,rgba(139,92,246,.14),transparent 50%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:32px 16px 64px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto}
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--muted);text-decoration:none;font-size:.9rem;
+    margin-bottom:24px;transition:.25s;
+  }
+  .back:hover{color:var(--accent);transform:translateX(-4px)}
+  .rise{
+    opacity:0;transform:translateY(28px);
+    animation:rise .65s cubic-bezier(.22,1,.36,1) forwards;
+    animation-delay:calc(var(--i,0)*.08s);
+  }
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .card{
+    background:linear-gradient(160deg,rgba(31,41,55,.85),rgba(17,24,39,.95));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:28px 24px;
+    backdrop-filter:blur(12px);
+    box-shadow:var(--shadow);
+  }
+  .title{
+    font-size:clamp(1.5rem,4vw,2rem);font-weight:800;
+    letter-spacing:-.03em;
+    background:linear-gradient(135deg,#fff 30%,var(--accent) 70%,var(--accent-2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    margin-bottom:6px;
+  }
+  .warn{
+    background:rgba(239,68,68,.1);
+    border:1px solid rgba(239,68,68,.3);
+    border-radius:14px;
+    padding:14px 16px;
+    font-size:.88rem;
+    color:#fca5a5;
+    margin:16px 0;
+    line-height:1.55;
+  }
+  .info{
+    background:rgba(59,130,246,.08);
+    border:1px solid rgba(59,130,246,.25);
+    border-radius:14px;
+    padding:14px 16px;
+    font-size:.88rem;
+    color:#93c5fd;
+    margin-bottom:18px;
+  }
+  .pkg{
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:20px;
+  }
+  .pkg .n{font-size:.95rem;font-weight:600;color:var(--muted)}
+  .pkg .p{
+    font-size:1.3rem;font-weight:800;
+    background:linear-gradient(135deg,#fff,var(--accent));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .fg{margin-bottom:16px}
+  .fg label{display:block;font-size:.88rem;font-weight:600;margin-bottom:6px;color:#d1d5db}
+  .fg input,.fg select{
+    width:100%;padding:13px 15px;border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(0,0,0,.3);
+    color:var(--text);font-family:var(--font);font-size:.95rem;
+    outline:none;transition:.25s;
+  }
+  .fg input:focus,.fg select:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(59,130,246,.2);
+  }
+  .fg input::placeholder{color:#6b7280}
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:15px 20px;border-radius:14px;border:none;cursor:pointer;
+    font-family:var(--font);font-size:1rem;font-weight:700;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;transition:.25s;
+    box-shadow:0 8px 24px rgba(59,130,246,.3);
+    margin-bottom:20px;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(59,130,246,.45);filter:brightness(1.08)}
+  .btn:active{transform:translateY(0)}
+  .note{
+    background:rgba(245,158,11,.08);
+    border:1px solid rgba(245,158,11,.25);
+    border-radius:14px;
+    padding:16px 18px;
+    font-size:.85rem;
+    color:#fcd34d;
+    line-height:1.7;
+  }
+  .note b{color:#fbbf24}
+  @media(max-width:600px){
+    body{padding:20px 12px 40px}
+    .card{padding:22px 16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="bang-gia-premium.html" class="back">← Quay lại bảng giá</a>
+
+  <div class="card rise" style="--i:0">
+    <h2 class="title">🎫 Thanh toán bằng thẻ cào</h2>
+
+    <div class="warn">
+      <b>⚠️ Cảnh báo quan trọng:</b><br>
+      Nhập đúng <b>Tên Discord</b>. Nếu sai hoặc không tìm thấy bạn trong server, thẻ sẽ <b>KHÔNG ĐƯỢC HOÀN LẠI</b> — coi như mất thẻ! ❌
+    </div>
+
+    <div class="info">
+      <b>ℹ️ Chú ý:</b> Chỉ nhận thẻ cào <b style="color:#fca5a5">VIETTEL</b>. Thẻ nhà mạng khác không hợp lệ ❌
+    </div>
+
+    <div class="pkg">
+      <div class="n" id="goi-ten">Premium — 2 tháng</div>
+      <div class="p" id="goi-gia">20.000đ</div>
+    </div>
+
+    <div class="fg">
+      <label for="discord-name">💬 Tên Discord của bạn</label>
+      <input type="text" id="discord-name" placeholder="VD: tenuser#1234 hoặc tenuser">
+    </div>
+
+    <div class="fg">
+      <label for="menh-gia">💰 Chọn mệnh giá thẻ</label>
+      <select id="menh-gia">
+        <option value="">-- Chọn mệnh giá --</option>
+        <option value="20000">20.000đ</option>
+        <option value="50000">50.000đ</option>
+        <option value="100000">100.000đ</option>
+      </select>
+    </div>
+
+    <div class="fg">
+      <label for="seri">📝 Số Seri thẻ</label>
+      <input type="text" id="seri" placeholder="Nhập số Seri trên thẻ">
+    </div>
+
+    <div class="fg">
+      <label for="ma-the">🔢 Mã thẻ cào</label>
+      <input type="text" id="ma-the" placeholder="Nhập mã số thẻ cào">
+    </div>
+
+    <button class="btn" onclick="guiTheCao()">✅ Gửi thẻ & nhận Premium</button>
+
+    <div class="note">
+      <b>📌 Lưu ý quan trọng:</b><br>
+      • Kiểm tra kỹ thông tin trước khi gửi — thông tin sai sẽ không được hoàn lại<br>
+      • Sau khi gửi, vui lòng đợi từ vài phút đến sớm nhất có thể<br>
+      • Chúng tôi sẽ kiểm tra thông tin và cấp Premium cho bạn ✅<br>
+      • Tên Discord sai / không tìm thấy trong server → thẻ sẽ KHÔNG được hoàn lại<br>
+      • Có vấn đề, liên hệ: <b>0383292439</b>
+    </div>
+  </div>
+</div>
+
+<script>
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1558195964672737451/hcA9wxAGuCUkfUu_LYEH9Ti4bQBA13dHKOCejdmRrIegPJs8OGlHFUSthqchuzxWRO9V";
+
+const goiData = {
+  "premium-2t-the": { ten: "Premium — 2 tháng", gia: "20.000đ", menhGia: "20000" },
+  "premium-10t-the": { ten: "Premium — 10 tháng", gia: "50.000đ", menhGia: "50000" },
+  "premium-vinhvien": { ten: "Premium VIP — Vĩnh viễn", gia: "100.000đ", menhGia: "100000" }
+};
+
+const p = new URLSearchParams(window.location.search);
+const goi = p.get("goi") || "premium-2t-the";
+const data = goiData[goi] || goiData["premium-2t-the"];
+
+document.getElementById("goi-ten").innerText = data.ten;
+document.getElementById("goi-gia").innerText = data.gia;
+document.getElementById("menh-gia").value = data.menhGia;
+
+async function guiTheCao(){
+  const discordName = document.getElementById("discord-name").value.trim();
+  const seri = document.getElementById("seri").value.trim();
+  const maThe = document.getElementById("ma-the").value.trim();
+  const menhGia = document.getElementById("menh-gia").value;
+
+  if(!discordName){
+    alert("⚠️ Vui lòng nhập Tên Discord của bạn!");
+    return;
+  }
+  if(!seri || !maThe || !menhGia){
+    alert("⚠️ Vui lòng điền đầy đủ thông tin thẻ cào!");
+    return;
+  }
+  if(!confirm(`⚠️ KIỂM TRA KỸ TRƯỚC KHI GỬI:\n\nTên Discord: ${discordName}\nMệnh giá: ${parseInt(menhGia).toLocaleString()}đ\nSeri: ${seri}\nMã thẻ: ${maThe}\n\nNếu nhập sai tên Discord hoặc không tìm thấy bạn trong server → THẺ SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận gửi?`)){
+    return;
+  }
+  try {
+    await fetch(DISCORD_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        embeds: [{
+          title: "🎫 THẺ CÀO MỚI ĐƯỢC GỬI",
+          color: 16766720,
+          fields: [
+            { name: "👤 Tên Discord", value: discordName, inline: false },
+            { name: "💰 Mệnh giá", value: parseInt(menhGia).toLocaleString() + "đ", inline: true },
+            { name: "📝 Số Seri", value: "`" + seri + "`", inline: true },
+            { name: "🔢 Mã thẻ", value: "`" + maThe + "`", inline: true },
+            { name: "📦 Gói đăng ký", value: data.ten + " — " + data.gia, inline: false }
+          ],
+          timestamp: new Date().toISOString(),
+          footer: { text: "ATRAS | GIABÌNH — Hệ thống tự động" }
+        }]
+      })
+    });
+  } catch (err) {
+    alert("⚠️ Lỗi kết nối! Vui lòng gửi lại thông tin thẻ cho @dobinhl12 trên Discord nhé!");
+    return;
+  }
+  alert("✅ Thẻ đã được gửi thành công!\nChúng tôi sẽ kiểm tra thông tin và cấp Premium cho bạn trong thời gian sớm nhất.\nCảm ơn bạn đã ủng hộ! 💖");
+  document.getElementById("discord-name").value = "";
+  document.getElementById("seri").value = "";
+  document.getElementById("ma-the").value = "";
+}
+</script>
+</body>
+</html>
