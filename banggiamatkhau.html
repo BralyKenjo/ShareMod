@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Bảng giá Premium — ATRAS | GIABÌNH 🐬</title>
+<title>Bảng giá Premium — BraKyo 🤑</title>
 <style>
   :root{
     --bg:#0b0f19;
@@ -36,21 +36,30 @@
     -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:980px;margin:0 auto}
-  .back{
-    display:inline-flex;align-items:center;gap:8px;
-    color:var(--muted);text-decoration:none;font-size:.9rem;
-    margin-bottom:28px;transition:.25s;
-  }
-  .back:hover{color:var(--accent);transform:translateX(-4px)}
   .rise{
     opacity:0;transform:translateY(28px);
     animation:rise .65s cubic-bezier(.22,1,.36,1) forwards;
     animation-delay:calc(var(--i,0)*.08s);
   }
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
-  .hero{text-align:center;margin-bottom:36px}
-  .crown{font-size:3.2rem;filter:drop-shadow(0 0 20px rgba(245,158,11,.5));animation:float 3s ease-in-out infinite}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+  /* ===== LOGO ===== */
+  .logo{
+    width:110px;height:110px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid rgba(59,130,246,.55);
+    box-shadow:
+      0 0 28px rgba(59,130,246,.5),
+      0 0 60px rgba(139,92,246,.25),
+      inset 0 0 12px rgba(255,255,255,.1);
+    animation:float 3s ease-in-out infinite;
+    margin-bottom:12px;
+    display:inline-block;
+  }
+
+  .hero{text-align:center;margin-bottom:36px}
   .title{
     font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;
     letter-spacing:-.03em;margin-top:8px;
@@ -105,20 +114,24 @@
   .contact{padding:22px}
   .contact h3{font-size:1.1rem;margin-bottom:10px}
   .contact p{color:var(--muted);font-size:.9rem;margin:4px 0}
+  .contact a{
+    color:var(--accent);text-decoration:none;font-weight:600;
+    transition:.2s;border-bottom:1px dashed transparent;
+  }
+  .contact a:hover{color:#93c5fd;border-bottom-color:#93c5fd}
   .contact .ok{color:var(--success);margin-top:10px;font-weight:600}
   @media(max-width:600px){
     body{padding:20px 12px 40px}
     .card{padding:22px 18px}
     .price{font-size:1.7rem}
+    .logo{width:88px;height:88px}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a href="javascript:history.back()" class="back">← Quay lại nhận script</a>
-
   <div class="hero rise" style="--i:0">
-    <div class="crown">👑</div>
+    <img src="IMG_1851.jpeg" alt="BraKyo Logo" class="logo">
     <h1 class="title">Bảng giá Premium</h1>
     <p class="sub">Nhận script ngay — không cần làm nhiệm vụ!</p>
   </div>
@@ -158,8 +171,7 @@
       <li>Tất cả script mới nhất</li>
       <li>Không cần làm nhiệm vụ</li>
       <li>Độc quyền cập nhật sớm</li>
-      <li>Role đặc biệt trên Discord</li>
-      <li>Hỗ trợ ưu tiên</li>
+      <li>Siêu cấp ưu ái</li>
     </ul>
     <a href="thanhtoanchuyenkhoan.html?goi=premium-10t-ck" class="btn">💳 Thanh toán ngay</a>
   </div>
@@ -173,8 +185,7 @@
       <li>Tất cả script mới nhất</li>
       <li>Không cần làm nhiệm vụ</li>
       <li>Độc quyền cập nhật sớm</li>
-      <li>Role đặc biệt trên Discord</li>
-      <li>Hỗ trợ ưu tiên</li>
+      <li>Siêu cấp ưu ái</li>
     </ul>
     <a href="thanhtoanthecao.html?goi=premium-10t-the" class="btn alt">📱 Nhập thẻ ngay</a>
   </div>
@@ -188,8 +199,7 @@
       <li>Tất cả script — vĩnh viễn</li>
       <li>Không cần làm nhiệm vụ</li>
       <li>Cập nhật sớm nhất</li>
-      <li>Role đặc biệt vĩnh viễn</li>
-      <li>Hỗ trợ 24/7 ưu tiên</li>
+      <li>Siêu cấp ưu ái</li>
       <li>Ưu tiên yêu cầu script mới</li>
     </ul>
     <a href="thanhtoanchuyenkhoan.html?goi=premium-vinhvien" class="btn">💳 Thanh toán ngay</a>
@@ -197,8 +207,8 @@
 
   <div class="card contact rise" style="--i:6">
     <h3>📞 Hỗ trợ & liên hệ</h3>
-    <p>💬 Discord: @dobinhl12</p>
-    <p>📱 SĐT: 0383292439</p>
+    <p>💬 TikTok 1: <a href="https://www.tiktok.com/@zankyo2114" target="_blank" rel="noopener">@zankyo2114</a></p>
+    <p>💬 TikTok 2: <a href="https://www.tiktok.com/@kenjobraly" target="_blank" rel="noopener">@kenjobraly</a></p>
     <p>⏰ Phản hồi: đa số online, xin hãy chờ!</p>
     <p class="ok">✅ Sau khi thanh toán, vui lòng đợi chúng tôi kích hoạt cho bạn!</p>
   </div>
