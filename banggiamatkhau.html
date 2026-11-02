@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bảng giá Premium — ATRAS | GIABÌNH 🐬</title>
+<style>
+  :root{
+    --bg:#0b0f19;
+    --surface:#111827;
+    --surface-2:#1f2937;
+    --border:rgba(255,255,255,.08);
+    --text:#f9fafb;
+    --muted:#9ca3af;
+    --accent:#3b82f6;
+    --accent-2:#8b5cf6;
+    --success:#22c55e;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+    --radius:18px;
+    --shadow:0 20px 50px rgba(0,0,0,.45);
+    --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font);
+    background:
+      radial-gradient(ellipse at 20% 0%,rgba(59,130,246,.18),transparent 55%),
+      radial-gradient(ellipse at 85% 15%,rgba(139,92,246,.14),transparent 50%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:32px 16px 64px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto}
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--muted);text-decoration:none;font-size:.9rem;
+    margin-bottom:28px;transition:.25s;
+  }
+  .back:hover{color:var(--accent);transform:translateX(-4px)}
+  .rise{
+    opacity:0;transform:translateY(28px);
+    animation:rise .65s cubic-bezier(.22,1,.36,1) forwards;
+    animation-delay:calc(var(--i,0)*.08s);
+  }
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .hero{text-align:center;margin-bottom:36px}
+  .crown{font-size:3.2rem;filter:drop-shadow(0 0 20px rgba(245,158,11,.5));animation:float 3s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .title{
+    font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;
+    letter-spacing:-.03em;margin-top:8px;
+    background:linear-gradient(135deg,#fff 30%,var(--accent) 70%,var(--accent-2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{color:var(--muted);font-size:.95rem;margin-top:6px}
+  .card{
+    background:linear-gradient(160deg,rgba(31,41,55,.85),rgba(17,24,39,.95));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    margin-bottom:18px;
+    backdrop-filter:blur(12px);
+    box-shadow:var(--shadow);
+    transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+    position:relative;overflow:hidden;
+  }
+  .card::before{
+    content:'';position:absolute;inset:0;border-radius:inherit;
+    background:radial-gradient(600px circle at 20% 0%,rgba(59,130,246,.12),transparent 45%);
+    pointer-events:none;
+  }
+  .card:hover{transform:translateY(-5px);border-color:rgba(59,130,246,.4);box-shadow:0 26px 60px rgba(0,0,0,.55)}
+  .card.hot{border-color:rgba(139,92,246,.45)}
+  .card.vip{
+    border-color:rgba(245,158,11,.45);
+    background:linear-gradient(160deg,rgba(245,158,11,.1),rgba(17,24,39,.95));
+  }
+  .plan{font-size:1.15rem;font-weight:700;margin-bottom:2px}
+  .price{
+    font-size:2rem;font-weight:800;letter-spacing:-.03em;
+    background:linear-gradient(135deg,#fff,var(--accent));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .card.vip .price{background:linear-gradient(135deg,#fff,#f59e0b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .dur,.pay{font-size:.88rem;color:var(--muted);margin-top:2px}
+  .ben{list-style:none;margin:16px 0 20px;display:grid;gap:8px}
+  .ben li{font-size:.9rem;display:flex;align-items:flex-start;gap:8px;color:#d1d5db}
+  .ben li::before{content:'✓';color:var(--success);font-weight:800;flex-shrink:0}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:14px 20px;border-radius:14px;border:none;cursor:pointer;
+    font-family:var(--font);font-size:.95rem;font-weight:700;text-decoration:none;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;transition:.25s;
+    box-shadow:0 8px 24px rgba(59,130,246,.3);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(59,130,246,.45);filter:brightness(1.08)}
+  .btn:active{transform:translateY(0)}
+  .btn.alt{background:linear-gradient(135deg,#f59e0b,#ef4444);box-shadow:0 8px 24px rgba(239,68,68,.25)}
+  .contact{padding:22px}
+  .contact h3{font-size:1.1rem;margin-bottom:10px}
+  .contact p{color:var(--muted);font-size:.9rem;margin:4px 0}
+  .contact .ok{color:var(--success);margin-top:10px;font-weight:600}
+  @media(max-width:600px){
+    body{padding:20px 12px 40px}
+    .card{padding:22px 18px}
+    .price{font-size:1.7rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="javascript:history.back()" class="back">← Quay lại nhận script</a>
+
+  <div class="hero rise" style="--i:0">
+    <div class="crown">👑</div>
+    <h1 class="title">Bảng giá Premium</h1>
+    <p class="sub">Nhận script ngay — không cần làm nhiệm vụ!</p>
+  </div>
+
+  <div class="card rise" style="--i:1">
+    <div class="plan">✨ Premium</div>
+    <div class="price">10.000đ</div>
+    <div class="dur">⏳ Thời hạn: 2 tháng</div>
+    <div class="pay">🏦 Chuyển khoản MB Bank</div>
+    <ul class="ben">
+      <li>Xem script mới nhất</li>
+      <li>Không cần làm nhiệm vụ</li>
+      <li>Hỗ trợ cơ bản</li>
+    </ul>
+    <a href="thanh-toan-chuyen-khoan.html?goi=premium-2t-ck" class="btn">💳 Thanh toán ngay</a>
+  </div>
+
+  <div class="card rise" style="--i:2">
+    <div class="plan">✨ Premium</div>
+    <div class="price">20.000đ</div>
+    <div class="dur">⏳ Thời hạn: 2 tháng</div>
+    <div class="pay">📱 Thẻ cào Viettel</div>
+    <ul class="ben">
+      <li>Xem script mới nhất</li>
+      <li>Không cần làm nhiệm vụ</li>
+      <li>Hỗ trợ cơ bản</li>
+    </ul>
+    <a href="thanh-toan-the-cao.html?goi=premium-2t-the" class="btn alt">📱 Nhập thẻ ngay</a>
+  </div>
+
+  <div class="card hot rise" style="--i:3">
+    <div class="plan">💎 Premium</div>
+    <div class="price">40.000đ</div>
+    <div class="dur">⏳ Thời hạn: 10 tháng</div>
+    <div class="pay">🏦 Chuyển khoản MB Bank</div>
+    <ul class="ben">
+      <li>Tất cả script mới nhất</li>
+      <li>Không cần làm nhiệm vụ</li>
+      <li>Độc quyền cập nhật sớm</li>
+      <li>Role đặc biệt trên Discord</li>
+      <li>Hỗ trợ ưu tiên</li>
+    </ul>
+    <a href="thanh-toan-chuyen-khoan.html?goi=premium-10t-ck" class="btn">💳 Thanh toán ngay</a>
+  </div>
+
+  <div class="card hot rise" style="--i:4">
+    <div class="plan">💎 Premium</div>
+    <div class="price">50.000đ</div>
+    <div class="dur">⏳ Thời hạn: 10 tháng</div>
+    <div class="pay">📱 Thẻ cào Viettel</div>
+    <ul class="ben">
+      <li>Tất cả script mới nhất</li>
+      <li>Không cần làm nhiệm vụ</li>
+      <li>Độc quyền cập nhật sớm</li>
+      <li>Role đặc biệt trên Discord</li>
+      <li>Hỗ trợ ưu tiên</li>
+    </ul>
+    <a href="thanh-toan-the-cao.html?goi=premium-10t-the" class="btn alt">📱 Nhập thẻ ngay</a>
+  </div>
+
+  <div class="card vip rise" style="--i:5">
+    <div class="plan">👑 Vĩnh viễn</div>
+    <div class="price">100.000đ</div>
+    <div class="dur">♾️ Sử dụng mãi mãi</div>
+    <div class="pay">🏦 Chuyển khoản MB Bank</div>
+    <ul class="ben">
+      <li>Tất cả script — vĩnh viễn</li>
+      <li>Không cần làm nhiệm vụ</li>
+      <li>Cập nhật sớm nhất</li>
+      <li>Role đặc biệt vĩnh viễn</li>
+      <li>Hỗ trợ 24/7 ưu tiên</li>
+      <li>Ưu tiên yêu cầu script mới</li>
+    </ul>
+    <a href="thanh-toan-chuyen-khoan.html?goi=premium-vinhvien" class="btn">💳 Thanh toán ngay</a>
+  </div>
+
+  <div class="card contact rise" style="--i:6">
+    <h3>📞 Hỗ trợ & liên hệ</h3>
+    <p>💬 Discord: @dobinhl12</p>
+    <p>📱 SĐT: 0383292439</p>
+    <p>⏰ Phản hồi: đa số online, xin hãy chờ!</p>
+    <p class="ok">✅ Sau khi thanh toán, vui lòng đợi chúng tôi kích hoạt cho bạn!</p>
+  </div>
+</div>
+</body>
+</html>
