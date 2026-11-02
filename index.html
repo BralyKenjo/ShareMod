@@ -15,7 +15,6 @@
   button:hover { background:#2563eb; }
   button.danger { background:#dc2626; padding:6px 12px; font-size:13px; }
   button.danger:hover { background:#b91c1c; }
-  button.small { padding:6px 12px; font-size:13px; }
   button.ghost { background:#2a2f39; padding:6px 12px; font-size:13px; }
   button.ghost:hover { background:#374151; }
   .msg { padding:10px 14px; border-radius:6px; margin:10px 0; font-size:14px; }
@@ -53,7 +52,6 @@
     <button id="tabPw" onclick="switchTab('pw')">Mật khẩu</button>
   </div>
 
-  <!-- TAB VIDEO -->
   <div id="tabVideoContent">
     <div class="card">
       <h2>Tạo video mới</h2>
@@ -89,7 +87,6 @@
     </div>
   </div>
 
-  <!-- TAB PASSWORD -->
   <div id="tabPwContent" class="hidden">
     <div class="card">
       <h2>Thêm mật khẩu tạm</h2>
@@ -110,9 +107,8 @@
 </div>
 
 <script>
-const WORKER = "https://modgame.phucpro4211.workers.dev";
+const WORKER = "https://automatic.phucpro4211.workers.dev";
 let adminPw = sessionStorage.getItem("adminPw") || "";
-let editingId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   if (adminPw) checkAdmin(adminPw);
@@ -164,15 +160,6 @@ function slug(s) {
 }
 function syncId() { document.getElementById("fId").value = slug(document.getElementById("fTitle").value); }
 
-function readLinksForm(prefix) {
-  return {
-    link4m:      document.getElementById(prefix + "1").value.trim(),
-    bumx:        document.getElementById(prefix + "2").value.trim(),
-    bbmkts:      document.getElementById(prefix + "3").value.trim(),
-    linkforearn: document.getElementById(prefix + "4").value.trim()
-  };
-}
-
 function resetCreateForm() {
   ["fTitle","fId","fContent","fL1","fL2","fL3","fL4"].forEach(x => document.getElementById(x).value = "");
   document.getElementById("fType").value = "script";
@@ -185,7 +172,12 @@ async function createVideo() {
   const title = document.getElementById("fTitle").value.trim();
   const type = document.getElementById("fType").value;
   const content = document.getElementById("fContent").value.trim();
-  const links = readLinksForm("fL");
+  const links = {
+    link4m:      document.getElementById("fL1").value.trim(),
+    bumx:        document.getElementById("fL2").value.trim(),
+    bbmkts:      document.getElementById("fL3").value.trim(),
+    linkforearn: document.getElementById("fL4").value.trim()
+  };
   if (!id || !title || !content) { m.innerHTML = '<div class="msg err">Thiếu trường</div>'; return; }
   if (!/^[a-z0-9_-]+$/.test(id)) { m.innerHTML = '<div class="msg err">ID chỉ a-z, 0-9, _, -</div>'; return; }
   try {
@@ -239,9 +231,6 @@ async function toggleEdit(id) {
   const info = await r.json();
   const links = info.links || {};
 
-  // Lấy thêm type + content qua verify? Không — info không trả content.
-  // Dùng endpoint reveal? Không. Cần endpoint admin-edit riêng để lấy content.
-  // Đơn giản hóa: form sửa links + title; content/type chỉ sửa qua data.json thủ công.
   box.innerHTML = `
     <div class="section-title">Sửa video <span class="id">${id}</span></div>
     <label>Tiêu đề</label>
