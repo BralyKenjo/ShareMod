@@ -3,14 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liên hệ qua acc tik tok nha</title></title>
+<title>Đang tải...</title>
 <style>
-  /* ===== RESET & VARIABLES ===== */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
     --bg: #0a0e14;
@@ -39,7 +34,6 @@
     position: relative;
   }
 
-  /* Nền gradient mờ ảo */
   body::before {
     content: '';
     position: fixed;
@@ -77,6 +71,7 @@
       0 0 20px var(--cyan-glow),
       0 0 60px rgba(0, 119, 255, 0.15);
     animation: logoPulse 3s ease-in-out infinite;
+    background: var(--surface);
   }
 
   @keyframes logoPulse {
@@ -124,13 +119,10 @@
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.06);
   }
 
-  /* Thanh accent trên cùng card */
   .card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--cyan), var(--blue), transparent);
     opacity: 0.5;
@@ -162,6 +154,7 @@
   }
 
   /* ===== LINK BUTTONS ===== */
+  /* Nút cơ bản */
   .link-btn {
     display: flex;
     align-items: center;
@@ -169,44 +162,77 @@
     width: 100%;
     padding: 13px 18px;
     margin-bottom: 10px;
-    background: linear-gradient(135deg, rgba(0, 119, 255, 0.12), rgba(0, 212, 255, 0.06));
-    border: 1px solid rgba(0, 212, 255, 0.15);
     border-radius: 10px;
-    color: var(--text);
     font-size: 0.9rem;
-    font-weight: 500;
     cursor: pointer;
     transition: all var(--transition);
     text-align: left;
     position: relative;
     overflow: hidden;
+    border: 1px solid;
+    font-family: inherit;
+    color: var(--text);
+    background: transparent;
   }
 
-  .link-btn:last-child {
-    margin-bottom: 0;
-  }
+  .link-btn:last-child { margin-bottom: 0; }
 
   .link-btn::after {
     content: '→';
     font-size: 1rem;
-    color: var(--cyan);
     transition: transform var(--transition);
   }
 
-  .link-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 119, 255, 0.22), rgba(0, 212, 255, 0.1));
+  /* Link4M — nổi bật nhất (gradient đầy đủ, đậm, có glow) */
+  .link-btn.primary {
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    border-color: transparent;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    box-shadow: 0 4px 20px rgba(0, 119, 255, 0.25);
+  }
+  .link-btn.primary::after { color: #fff; }
+  .link-btn.primary:hover {
+    box-shadow: 0 6px 30px rgba(0, 212, 255, 0.45);
+    transform: translateY(-2px);
+  }
+  .link-btn.primary:hover::after { transform: translateX(4px); }
+  .link-btn.primary:active { transform: translateY(0) scale(0.99); }
+
+  /* Bumx — nổi bật vừa (nền tối, viền + chữ cyan, đậm vừa) */
+  .link-btn.secondary {
+    background: rgba(0, 212, 255, 0.06);
     border-color: rgba(0, 212, 255, 0.4);
-    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+    color: var(--cyan);
+    font-weight: 600;
+    box-shadow: 0 2px 12px rgba(0, 212, 255, 0.08);
+  }
+  .link-btn.secondary::after { color: var(--cyan); }
+  .link-btn.secondary:hover {
+    background: rgba(0, 212, 255, 0.12);
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
     transform: translateY(-1px);
   }
+  .link-btn.secondary:hover::after { transform: translateX(4px); }
+  .link-btn.secondary:active { transform: translateY(0) scale(0.99); }
 
-  .link-btn:hover::after {
-    transform: translateX(4px);
+  /* Bbmkts, LinkForEarn — bình thường (mờ nhạt hơn) */
+  .link-btn.normal {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: var(--border);
+    color: var(--text-dim);
+    font-weight: 500;
   }
-
-  .link-btn:active {
-    transform: translateY(0) scale(0.99);
+  .link-btn.normal::after { color: var(--text-dim); }
+  .link-btn.normal:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(0, 212, 255, 0.2);
+    color: var(--text);
   }
+  .link-btn.normal:hover::after { transform: translateX(4px); color: var(--cyan); }
 
   /* ===== PASSWORD INPUT ===== */
   .pw-input-wrap {
@@ -228,16 +254,13 @@
     transition: border-color var(--transition), box-shadow var(--transition);
   }
 
-  input[type="password"]::placeholder {
-    color: #5a6577;
-  }
+  input[type="password"]::placeholder { color: #5a6577; }
 
   input[type="password"]:focus {
     border-color: var(--cyan);
     box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.12), 0 0 20px rgba(0, 212, 255, 0.08);
   }
 
-  /* Toggle hiện/ẩn mật khẩu */
   .pw-toggle {
     position: absolute;
     right: 14px;
@@ -253,10 +276,7 @@
     width: auto;
     margin: 0;
   }
-
-  .pw-toggle:hover {
-    color: var(--cyan);
-  }
+  .pw-toggle:hover { color: var(--cyan); }
 
   /* ===== PRIMARY BUTTON ===== */
   .btn-primary {
@@ -280,24 +300,10 @@
     box-shadow: 0 4px 25px rgba(0, 212, 255, 0.3);
     transform: translateY(-1px);
   }
+  .btn-primary:active { transform: translateY(0) scale(0.99); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-  .btn-primary:active {
-    transform: translateY(0) scale(0.99);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-  }
-
-  /* Spinner trong nút khi đang xử lý */
-  .btn-primary.loading {
-    pointer-events: none;
-    opacity: 0.8;
-  }
-
+  .btn-primary.loading { pointer-events: none; opacity: 0.8; }
   .btn-primary.loading::after {
     content: '';
     position: absolute;
@@ -311,10 +317,7 @@
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
   }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ===== CHECKBOX ===== */
   .remember {
@@ -368,7 +371,7 @@
     border-radius: 10px;
     font-size: 0.8rem;
     color: var(--text-dim);
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
   .contact-box a {
@@ -376,7 +379,6 @@
     text-decoration: none;
     font-weight: 600;
     transition: color var(--transition);
-    position: relative;
   }
 
   .contact-box a:hover {
@@ -385,15 +387,9 @@
     text-underline-offset: 3px;
   }
 
-  /* ===== RESULT (SCRIPT / LINK) ===== */
-  #resultCard {
-    display: none;
-  }
-
-  #resultCard.active {
-    display: block;
-    animation: fadeInUp 0.5s ease-out;
-  }
+  /* ===== RESULT ===== */
+  #resultCard { display: none; }
+  #resultCard.active { display: block; animation: fadeInUp 0.5s ease-out; }
 
   .script-header {
     display: flex;
@@ -401,10 +397,7 @@
     align-items: center;
     margin-bottom: 14px;
   }
-
-  .script-header h2 {
-    margin: 0;
-  }
+  .script-header h2 { margin: 0; }
 
   .btn-copy {
     width: auto;
@@ -420,12 +413,10 @@
     transition: all var(--transition);
     white-space: nowrap;
   }
-
   .btn-copy:hover {
     background: rgba(0, 212, 255, 0.2);
     border-color: var(--cyan);
   }
-
   .btn-copy.copied {
     background: rgba(0, 200, 100, 0.15);
     border-color: #00c864;
@@ -445,27 +436,12 @@
     max-height: 60vh;
     overflow-y: auto;
     color: #c9d1d9;
-    position: relative;
   }
+  pre::-webkit-scrollbar { width: 6px; }
+  pre::-webkit-scrollbar-track { background: transparent; }
+  pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  pre::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
-  pre::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  pre::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  pre::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
-  }
-
-  pre::-webkit-scrollbar-thumb:hover {
-    background: var(--text-dim);
-  }
-
-  /* ===== LINK GỐC (type link) ===== */
   .open-link {
     display: inline-flex;
     align-items: center;
@@ -480,16 +456,11 @@
     transition: all var(--transition);
     margin-top: 8px;
   }
-
   .open-link:hover {
     box-shadow: 0 4px 25px rgba(0, 212, 255, 0.3);
     transform: translateY(-1px);
   }
-
-  .open-link::after {
-    content: '↗';
-    font-size: 1rem;
-  }
+  .open-link::after { content: '↗'; font-size: 1rem; }
 
   /* ===== ERROR ===== */
   .msg-err {
@@ -502,10 +473,7 @@
     font-size: 0.82rem;
     animation: shakeIn 0.4s ease-out;
   }
-
-  .msg-err:empty {
-    display: none;
-  }
+  .msg-err:empty { display: none; }
 
   @keyframes shakeIn {
     0% { transform: translateX(-8px); opacity: 0; }
@@ -515,14 +483,13 @@
     100% { transform: translateX(0); opacity: 1; }
   }
 
-  /* ===== LOADING STATE ===== */
+  /* ===== LOADING ===== */
   .loading-state {
     text-align: center;
     padding: 60px 20px;
     color: var(--text-dim);
     animation: fadeIn 0.3s ease;
   }
-
   .loading-state .spinner {
     width: 36px;
     height: 36px;
@@ -533,24 +500,15 @@
     animation: spin 0.8s linear infinite;
   }
 
-  /* ===== GLOBAL ANIMATIONS ===== */
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
   }
 
-  /* ===== RESPONSIVE ===== */
   @media (max-width: 480px) {
     body { padding: 24px 12px 40px; }
     h1 { font-size: 1.4rem; }
@@ -567,10 +525,9 @@
     Đang tải...
   </div>
 
-  <!-- Nội dung chính sẽ được render bởi JS -->
   <div id="contentArea" style="display:none;">
     <div class="logo-wrap">
-      <img src="assets/logo.jpeg" alt="Logo" onerror="this.style.display='none'">
+      <img src="IMG_1851.jpeg" alt="Logo" onerror="this.style.display='none'">
     </div>
     <h1 id="title">Đang tải...</h1>
     <p class="subtitle">Chọn link bên dưới hoặc dùng mật khẩu để lấy script</p>
@@ -584,7 +541,6 @@
 const WORKER = "https://automatic.phucpro4211.workers.dev";
 const id = new URLSearchParams(location.search).get("id");
 
-/* ===== HELPERS ===== */
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -601,7 +557,6 @@ function hideLoading() {
   document.getElementById("contentArea").style.display = "block";
 }
 
-/* ===== MAIN ===== */
 async function main() {
   if (!id) {
     document.getElementById("loadingState").innerHTML =
@@ -609,7 +564,6 @@ async function main() {
     return;
   }
 
-  // 1) Token đã lưu → auto reveal
   const saved = localStorage.getItem("token_" + id);
   if (saved) {
     try {
@@ -629,7 +583,6 @@ async function main() {
     } catch {}
   }
 
-  // 2) Chưa có token → tải info + hiện form
   try {
     const r = await fetch(WORKER + "/api/info/" + id);
     if (!r.ok) {
@@ -648,19 +601,19 @@ async function main() {
   }
 }
 
-/* ===== RENDER FORM ===== */
 function showMain(links) {
-  const linkLabels = {
-    link4m: "Link4M (khuyên dùng)",
-    bumx: "Bumx (nhanh nhất)",
-    bbmkts: "Bbmkts (dự phòng)",
-    linkforearn: "LinkForEarn (dự phòng)"
+  // Style class cho từng nút: link4m nổi bật nhất, bumx nổi bật vừa, còn lại bình thường
+  const linkConfig = {
+    link4m:      { label: "Link4M",      cls: "primary"   },
+    bumx:        { label: "Bumx",        cls: "secondary" },
+    bbmkts:      { label: "Bbmkts",      cls: "normal"    },
+    linkforearn: { label: "LinkForEarn", cls: "normal"    }
   };
 
-  const linkBtns = Object.entries(linkLabels).map(([k, label]) => {
+  const linkBtns = Object.entries(linkConfig).map(([k, cfg]) => {
     const u = links[k];
     if (!u) return "";
-    return `<button class="link-btn" onclick="window.open('${escapeHtml(u)}','_blank')">${escapeHtml(label)}</button>`;
+    return `<button class="link-btn ${cfg.cls}" onclick="window.open('${escapeHtml(u)}','_blank')">${escapeHtml(cfg.label)}</button>`;
   }).join("");
 
   const hasLinks = linkBtns.length > 0;
@@ -680,7 +633,7 @@ function showMain(links) {
       <h2>
         <span class="icon">🔑</span> Nhập mật khẩu
       </h2>
-      <p class="card-desc">Nhập mật khẩu để lấy ngay, không cần qua quảng cáo.</p>
+      <p class="card-desc">Nhập mật khẩu để lấy script, không cần vượt link</p>
       <div class="pw-input-wrap">
         <input type="password" id="pw" placeholder="Nhập mật khẩu để lấy ngay" autocomplete="off">
         <button class="pw-toggle" type="button" onclick="togglePw()" id="pwToggle">👁</button>
@@ -695,16 +648,16 @@ function showMain(links) {
       <div class="msg-err" id="pwMsg"></div>
 
       <div class="contact-box">
-        Nếu chưa có mật khẩu, hãy liên hệ
+        Nếu chưa có mật khẩu hãy liên hệ
         <a href="https://www.tiktok.com/@zankyo2114" target="_blank" rel="noopener">@zankyo2114</a>
         hoặc
         <a href="https://www.tiktok.com/@kenjobraly" target="_blank" rel="noopener">@kenjobraly</a>
+        để mua
       </div>
     </div>
   `;
 }
 
-/* ===== PASSWORD TOGGLE ===== */
 function togglePw() {
   const inp = document.getElementById("pw");
   const btn = document.getElementById("pwToggle");
@@ -718,7 +671,6 @@ function togglePw() {
   }
 }
 
-/* ===== VERIFY ===== */
 async function doVerify() {
   const pw = document.getElementById("pw").value.trim();
   const remember = document.getElementById("remember").checked;
@@ -758,7 +710,6 @@ async function doVerify() {
   }
 }
 
-/* ===== REVEAL RESULT ===== */
 function reveal(data) {
   document.getElementById("mainCard").innerHTML = "";
   const rc = document.getElementById("resultCard");
@@ -786,13 +737,11 @@ function reveal(data) {
     `;
   }
 
-  // Scroll mượt xuống kết quả
   setTimeout(() => {
     rc.scrollIntoView({ behavior: "smooth", block: "start" });
   }, 100);
 }
 
-/* ===== COPY SCRIPT ===== */
 function copyScript() {
   const el = document.getElementById("scriptBox");
   if (!el) return;
@@ -818,7 +767,6 @@ function copyScript() {
   });
 }
 
-/* ===== START ===== */
 main();
 </script>
 </body>
