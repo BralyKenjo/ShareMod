@@ -2,128 +2,774 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Đang tải...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liên hệ qua acc tik tok nha</title></title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 30px auto; padding: 0 16px; background:#0f1116; color:#e6e8eb; }
-  h1 { color:#fff; margin-bottom:6px; }
-  .card { background:#1a1d24; border:1px solid #2a2f39; border-radius:10px; padding:18px; margin-bottom:16px; }
-  button { padding:11px 18px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; width:100%; margin-top:8px; }
-  button:hover { background:#2563eb; }
-  button.alt { background:#4b5563; }
-  button.alt:hover { background:#374151; }
-  input[type=password] { width:100%; padding:9px 11px; background:#0f1116; border:1px solid #2a2f39; border-radius:6px; color:#e6e8eb; font-size:14px; box-sizing:border-box; margin-top:8px; }
-  pre { background:#0f1116; border:1px solid #2a2f39; border-radius:8px; padding:14px; overflow:auto; font-size:13px; white-space:pre-wrap; word-break:break-all; max-height:60vh; }
-  .msg { padding:10px 14px; border-radius:6px; margin:10px 0; font-size:14px; }
-  .msg.err { background:#3b1318; border:1px solid #7f1d1d; color:#fca5a5; }
-  label.remember { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:14px; color:#9aa4b2; cursor:pointer; }
-  .hidden { display:none; }
-  a.open-link { display:inline-block; padding:11px 18px; background:#3b82f6; color:#fff; border-radius:6px; text-decoration:none; font-size:14px; margin-top:8px; }
-  .desc { color:#9aa4b2; font-size:13px; margin-top:4px; }
+  /* ===== RESET & VARIABLES ===== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #0a0e14;
+    --surface: #121820;
+    --surface-hover: #1a2330;
+    --border: #1f2a3a;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --cyan: #00d4ff;
+    --blue: #0077ff;
+    --cyan-glow: rgba(0, 212, 255, 0.25);
+    --radius: 14px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 60px;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Nền gradient mờ ảo */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 10%, rgba(0, 119, 255, 0.08), transparent),
+      radial-gradient(ellipse 500px 350px at 80% 90%, rgba(0, 212, 255, 0.06), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 680px;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  /* ===== LOGO ===== */
+  .logo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.5s ease-out 0.1s both;
+  }
+
+  .logo-wrap img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(0, 212, 255, 0.4);
+    box-shadow:
+      0 0 20px var(--cyan-glow),
+      0 0 60px rgba(0, 119, 255, 0.15);
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes logoPulse {
+    0%, 100% { box-shadow: 0 0 20px var(--cyan-glow), 0 0 60px rgba(0, 119, 255, 0.15); }
+    50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 119, 255, 0.25); }
+  }
+
+  /* ===== TITLE ===== */
+  h1 {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 60%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.5s ease-out 0.15s both;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.5s ease-out 0.2s both;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease-out 0.25s both;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .card:hover {
+    border-color: rgba(0, 212, 255, 0.25);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.06);
+  }
+
+  /* Thanh accent trên cùng card */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--blue), transparent);
+    opacity: 0.5;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card h2 .icon {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan);
+  }
+
+  .card-desc {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+  }
+
+  /* ===== LINK BUTTONS ===== */
+  .link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 13px 18px;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, rgba(0, 119, 255, 0.12), rgba(0, 212, 255, 0.06));
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link-btn:last-child {
+    margin-bottom: 0;
+  }
+
+  .link-btn::after {
+    content: '→';
+    font-size: 1rem;
+    color: var(--cyan);
+    transition: transform var(--transition);
+  }
+
+  .link-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 119, 255, 0.22), rgba(0, 212, 255, 0.1));
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .link-btn:hover::after {
+    transform: translateX(4px);
+  }
+
+  .link-btn:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  /* ===== PASSWORD INPUT ===== */
+  .pw-input-wrap {
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  input[type="password"] {
+    width: 100%;
+    padding: 13px 16px;
+    padding-right: 44px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  input[type="password"]::placeholder {
+    color: #5a6577;
+  }
+
+  input[type="password"]:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.12), 0 0 20px rgba(0, 212, 255, 0.08);
+  }
+
+  /* Toggle hiện/ẩn mật khẩu */
+  .pw-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    transition: color var(--transition);
+    width: auto;
+    margin: 0;
+  }
+
+  .pw-toggle:hover {
+    color: var(--cyan);
+  }
+
+  /* ===== PRIMARY BUTTON ===== */
+  .btn-primary {
+    width: 100%;
+    padding: 13px 20px;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 25px rgba(0, 212, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Spinner trong nút khi đang xử lý */
+  .btn-primary.loading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  .btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== CHECKBOX ===== */
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .remember input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--bg);
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .remember input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    border-color: var(--cyan);
+  }
+
+  .remember input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* ===== CONTACT / SUPPORT ===== */
+  .contact-box {
+    text-align: center;
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: rgba(0, 212, 255, 0.04);
+    border: 1px dashed rgba(0, 212, 255, 0.2);
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .contact-box a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--transition);
+    position: relative;
+  }
+
+  .contact-box a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ===== RESULT (SCRIPT / LINK) ===== */
+  #resultCard {
+    display: none;
+  }
+
+  #resultCard.active {
+    display: block;
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  .script-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .script-header h2 {
+    margin: 0;
+  }
+
+  .btn-copy {
+    width: auto;
+    padding: 8px 16px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 8px;
+    color: var(--cyan);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+
+  .btn-copy:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--cyan);
+  }
+
+  .btn-copy.copied {
+    background: rgba(0, 200, 100, 0.15);
+    border-color: #00c864;
+    color: #00c864;
+  }
+
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 60vh;
+    overflow-y: auto;
+    color: #c9d1d9;
+    position: relative;
+  }
+
+  pre::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  pre::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  pre::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  pre::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim);
+  }
+
+  /* ===== LINK GỐC (type link) ===== */
+  .open-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 24px;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all var(--transition);
+    margin-top: 8px;
+  }
+
+  .open-link:hover {
+    box-shadow: 0 4px 25px rgba(0, 212, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .open-link::after {
+    content: '↗';
+    font-size: 1rem;
+  }
+
+  /* ===== ERROR ===== */
+  .msg-err {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    border-radius: 10px;
+    color: #fca5a5;
+    font-size: 0.82rem;
+    animation: shakeIn 0.4s ease-out;
+  }
+
+  .msg-err:empty {
+    display: none;
+  }
+
+  @keyframes shakeIn {
+    0% { transform: translateX(-8px); opacity: 0; }
+    25% { transform: translateX(8px); }
+    50% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+
+  /* ===== LOADING STATE ===== */
+  .loading-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .loading-state .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* ===== GLOBAL ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 480px) {
+    body { padding: 24px 12px 40px; }
+    h1 { font-size: 1.4rem; }
+    .card { padding: 20px 16px; }
+    .logo-wrap img { width: 76px; height: 76px; }
+  }
 </style>
 </head>
 <body>
 
-<h1 id="title">Đang tải...</h1>
+<div class="container" id="app">
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div>
+    Đang tải...
+  </div>
 
-<div id="mainCard"></div>
-<div id="resultCard" class="hidden"></div>
+  <!-- Nội dung chính sẽ được render bởi JS -->
+  <div id="contentArea" style="display:none;">
+    <div class="logo-wrap">
+      <img src="assets/logo.jpeg" alt="Logo" onerror="this.style.display='none'">
+    </div>
+    <h1 id="title">Đang tải...</h1>
+    <p class="subtitle">Chọn link bên dưới hoặc dùng mật khẩu để lấy script</p>
+
+    <div id="mainCard"></div>
+    <div id="resultCard"></div>
+  </div>
+</div>
 
 <script>
 const WORKER = "https://automatic.phucpro4211.workers.dev";
 const id = new URLSearchParams(location.search).get("id");
 
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+/* ===== HELPERS ===== */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
 
+function showLoading() {
+  document.getElementById("loadingState").style.display = "block";
+  document.getElementById("contentArea").style.display = "none";
+}
+
+function hideLoading() {
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("contentArea").style.display = "block";
+}
+
+/* ===== MAIN ===== */
 async function main() {
-  if (!id) { document.getElementById("title").textContent = "Thiếu ID"; return; }
+  if (!id) {
+    document.getElementById("loadingState").innerHTML =
+      '<p style="color:#fca5a5;">Thiếu ID trên URL.</p>';
+    return;
+  }
 
+  // 1) Token đã lưu → auto reveal
   const saved = localStorage.getItem("token_" + id);
   if (saved) {
     try {
       const r = await fetch(WORKER + "/api/reveal", {
-        method:"POST", headers:{"Content-Type":"application/json"},
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: saved })
       });
       const data = await r.json();
-      if (data.success) { reveal(data); return; }
+      if (data.success) {
+        hideLoading();
+        document.getElementById("title").textContent = "Script của bạn";
+        reveal(data);
+        return;
+      }
       localStorage.removeItem("token_" + id);
     } catch {}
   }
 
+  // 2) Chưa có token → tải info + hiện form
   try {
     const r = await fetch(WORKER + "/api/info/" + id);
     if (!r.ok) {
-      document.getElementById("title").textContent = "Không tìm thấy";
-      document.getElementById("mainCard").innerHTML = '<div class="msg err">ID không tồn tại.</div>';
+      document.getElementById("loadingState").innerHTML =
+        '<p style="color:#fca5a5;">ID không tồn tại hoặc đã bị xoá.</p>';
       return;
     }
     const info = await r.json();
     document.title = info.title;
     document.getElementById("title").textContent = info.title;
+    hideLoading();
     showMain(info.links || {});
   } catch {
-    document.getElementById("mainCard").innerHTML = '<div class="msg err">Lỗi kết nối</div>';
+    document.getElementById("loadingState").innerHTML =
+      '<p style="color:#fca5a5;">Lỗi kết nối. Vui lòng thử lại.</p>';
   }
 }
 
+/* ===== RENDER FORM ===== */
 function showMain(links) {
-  const labels = {
-    link4m:      "Link4M (khuyên dùng)",
-    bumx:        "Bumx (nhanh nhất)",
-    bbmkts:      "Bbmkts (dự phòng)",
+  const linkLabels = {
+    link4m: "Link4M (khuyên dùng)",
+    bumx: "Bumx (nhanh nhất)",
+    bbmkts: "Bbmkts (dự phòng)",
     linkforearn: "LinkForEarn (dự phòng)"
   };
-  const linkBtns = Object.entries(labels).map(([k, label]) => {
+
+  const linkBtns = Object.entries(linkLabels).map(([k, label]) => {
     const u = links[k];
-    return u ? `<button onclick="window.open('${escapeHtml(u)}','_blank')">${label}</button>` : "";
+    if (!u) return "";
+    return `<button class="link-btn" onclick="window.open('${escapeHtml(u)}','_blank')">${escapeHtml(label)}</button>`;
   }).join("");
 
+  const hasLinks = linkBtns.length > 0;
+
   document.getElementById("mainCard").innerHTML = `
+    ${hasLinks ? `
+      <div class="card">
+        <h2>
+          <span class="icon">⚡</span> Lấy script miễn phí
+        </h2>
+        <p class="card-desc">Chọn 1 trong các link dưới để vượt quảng cáo:</p>
+        ${linkBtns}
+      </div>
+    ` : ""}
+
     <div class="card">
-      <h2 style="margin-top:0;color:#fff">Lấy script</h2>
-      <p class="desc">Chọn 1 trong các link dưới để vượt quảng cáo:</p>
-      ${linkBtns || '<p class="desc">Video này chưa có link shortener.</p>'}
-    </div>
-    <div class="card">
-      <h2 style="margin-top:0;color:#fff">Hoặc dùng mật khẩu</h2>
-      <input type="password" id="pw" placeholder="Nhập mật khẩu để lấy ngay">
-      <label class="remember"><input type="checkbox" id="remember"> Lưu cho lần sau</label>
-      <button onclick="doVerify()">Xác minh</button>
-      <div id="pwMsg"></div>
+      <h2>
+        <span class="icon">🔑</span> Nhập mật khẩu
+      </h2>
+      <p class="card-desc">Nhập mật khẩu để lấy ngay, không cần qua quảng cáo.</p>
+      <div class="pw-input-wrap">
+        <input type="password" id="pw" placeholder="Nhập mật khẩu để lấy ngay" autocomplete="off">
+        <button class="pw-toggle" type="button" onclick="togglePw()" id="pwToggle">👁</button>
+      </div>
+      <label class="remember">
+        <input type="checkbox" id="remember">
+        Lưu cho lần sau
+      </label>
+      <button class="btn-primary" id="verifyBtn" onclick="doVerify()">
+        Xác minh
+      </button>
+      <div class="msg-err" id="pwMsg"></div>
+
+      <div class="contact-box">
+        Nếu chưa có mật khẩu, hãy liên hệ
+        <a href="https://www.tiktok.com/@zankyo2114" target="_blank" rel="noopener">@zankyo2114</a>
+        hoặc
+        <a href="https://www.tiktok.com/@kenjobraly" target="_blank" rel="noopener">@kenjobraly</a>
+      </div>
     </div>
   `;
 }
 
+/* ===== PASSWORD TOGGLE ===== */
+function togglePw() {
+  const inp = document.getElementById("pw");
+  const btn = document.getElementById("pwToggle");
+  if (!inp) return;
+  if (inp.type === "password") {
+    inp.type = "text";
+    btn.textContent = "🙈";
+  } else {
+    inp.type = "password";
+    btn.textContent = "👁";
+  }
+}
+
+/* ===== VERIFY ===== */
 async function doVerify() {
-  const pw = document.getElementById("pw").value;
+  const pw = document.getElementById("pw").value.trim();
   const remember = document.getElementById("remember").checked;
   const msg = document.getElementById("pwMsg");
-  msg.innerHTML = "";
+  const btn = document.getElementById("verifyBtn");
+
+  msg.textContent = "";
   if (!pw) return;
+
+  btn.classList.add("loading");
+  btn.disabled = true;
+
   try {
     const r = await fetch(WORKER + "/api/verify", {
-      method:"POST", headers:{"Content-Type":"application/json"},
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, password: pw })
     });
     const data = await r.json();
-    if (!r.ok) { msg.innerHTML = `<div class="msg err">${data.error || "sai mật khẩu"}</div>`; return; }
-    if (remember && data.token) localStorage.setItem("token_" + id, data.token);
+
+    if (!r.ok) {
+      msg.textContent = data.error || "Sai mật khẩu";
+      btn.classList.remove("loading");
+      btn.disabled = false;
+      return;
+    }
+
+    if (remember && data.token) {
+      localStorage.setItem("token_" + id, data.token);
+    }
+
     reveal(data);
-  } catch { msg.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+  } catch {
+    msg.textContent = "Lỗi kết nối. Vui lòng thử lại.";
+    btn.classList.remove("loading");
+    btn.disabled = false;
+  }
 }
 
+/* ===== REVEAL RESULT ===== */
 function reveal(data) {
-  document.getElementById("mainCard").classList.add("hidden");
+  document.getElementById("mainCard").innerHTML = "";
   const rc = document.getElementById("resultCard");
-  rc.classList.remove("hidden");
+  rc.classList.add("active");
 
   if (data.type === "script") {
     rc.innerHTML = `
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h2 style="margin:0;color:#fff">Script</h2>
-          <button class="alt" style="width:auto;padding:8px 14px" onclick="copyScript()">Sao chép</button>
+        <div class="script-header">
+          <h2><span class="icon">📜</span> Script</h2>
+          <button class="btn-copy" id="copyBtn" onclick="copyScript()">Sao chép</button>
         </div>
         <pre id="scriptBox">${escapeHtml(data.content)}</pre>
       </div>
@@ -131,24 +777,48 @@ function reveal(data) {
   } else {
     rc.innerHTML = `
       <div class="card">
-        <h2 style="margin-top:0;color:#fff">Link gốc</h2>
-        <p class="desc">Bấm nút để mở trong tab mới:</p>
-        <a class="open-link" href="${escapeHtml(data.content)}" target="_blank" rel="noopener">Mở link gốc</a>
+        <h2><span class="icon">🔗</span> Link gốc</h2>
+        <p class="card-desc">Bấm nút bên dưới để mở trong tab mới:</p>
+        <a class="open-link" href="${escapeHtml(data.content)}" target="_blank" rel="noopener">
+          Mở link gốc
+        </a>
       </div>
     `;
   }
+
+  // Scroll mượt xuống kết quả
+  setTimeout(() => {
+    rc.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 100);
 }
 
+/* ===== COPY SCRIPT ===== */
 function copyScript() {
   const el = document.getElementById("scriptBox");
+  if (!el) return;
   const text = el.textContent;
-  navigator.clipboard.writeText(text).catch(() => {
-    const r = document.createRange(); r.selectNode(el);
-    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+  const btn = document.getElementById("copyBtn");
+
+  const done = () => {
+    btn.textContent = "Đã sao chép ✓";
+    btn.classList.add("copied");
+    setTimeout(() => {
+      btn.textContent = "Sao chép";
+      btn.classList.remove("copied");
+    }, 2000);
+  };
+
+  navigator.clipboard.writeText(text).then(done).catch(() => {
+    const range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
     document.execCommand("copy");
+    done();
   });
 }
 
+/* ===== START ===== */
 main();
 </script>
 </body>
