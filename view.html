@@ -151,19 +151,18 @@
     color: var(--text-dim);
     font-size: 0.8rem;
     margin-bottom: 16px;
+    line-height: 1.5;
   }
 
   /* ===== LINK BUTTONS ===== */
-  /* Nút cơ bản */
   .link-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 13px 18px;
+    padding: 12px 18px;
     margin-bottom: 10px;
     border-radius: 10px;
-    font-size: 0.9rem;
     cursor: pointer;
     transition: all var(--transition);
     text-align: left;
@@ -177,13 +176,32 @@
 
   .link-btn:last-child { margin-bottom: 0; }
 
+  .link-btn .btn-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .link-btn .btn-label {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .link-btn .btn-sub {
+    font-size: 0.72rem;
+    line-height: 1.2;
+    opacity: 0.75;
+    font-weight: 400;
+  }
+
   .link-btn::after {
     content: '→';
     font-size: 1rem;
     transition: transform var(--transition);
   }
 
-  /* Link4M — nổi bật nhất (gradient đầy đủ, đậm, có glow) */
+  /* Link4M — nổi bật nhất */
   .link-btn.primary {
     background: linear-gradient(135deg, var(--blue), var(--cyan));
     border-color: transparent;
@@ -193,6 +211,8 @@
     letter-spacing: 0.01em;
     box-shadow: 0 4px 20px rgba(0, 119, 255, 0.25);
   }
+  .link-btn.primary .btn-label { font-weight: 700; font-size: 0.95rem; }
+  .link-btn.primary .btn-sub { opacity: 0.9; }
   .link-btn.primary::after { color: #fff; }
   .link-btn.primary:hover {
     box-shadow: 0 6px 30px rgba(0, 212, 255, 0.45);
@@ -201,7 +221,7 @@
   .link-btn.primary:hover::after { transform: translateX(4px); }
   .link-btn.primary:active { transform: translateY(0) scale(0.99); }
 
-  /* Bumx — nổi bật vừa (nền tối, viền + chữ cyan, đậm vừa) */
+  /* Bumx — nổi bật vừa */
   .link-btn.secondary {
     background: rgba(0, 212, 255, 0.06);
     border-color: rgba(0, 212, 255, 0.4);
@@ -209,6 +229,7 @@
     font-weight: 600;
     box-shadow: 0 2px 12px rgba(0, 212, 255, 0.08);
   }
+  .link-btn.secondary .btn-label { font-weight: 600; }
   .link-btn.secondary::after { color: var(--cyan); }
   .link-btn.secondary:hover {
     background: rgba(0, 212, 255, 0.12);
@@ -219,13 +240,14 @@
   .link-btn.secondary:hover::after { transform: translateX(4px); }
   .link-btn.secondary:active { transform: translateY(0) scale(0.99); }
 
-  /* Bbmkts, LinkForEarn — bình thường (mờ nhạt hơn) */
+  /* Bbmkts, LinkForEarn — bình thường */
   .link-btn.normal {
     background: rgba(255, 255, 255, 0.02);
     border-color: var(--border);
     color: var(--text-dim);
     font-weight: 500;
   }
+  .link-btn.normal .btn-label { font-weight: 500; }
   .link-btn.normal::after { color: var(--text-dim); }
   .link-btn.normal:hover {
     background: rgba(255, 255, 255, 0.04);
@@ -233,6 +255,22 @@
     color: var(--text);
   }
   .link-btn.normal:hover::after { transform: translateX(4px); color: var(--cyan); }
+
+  /* Dòng mô tả dưới cụm 4 nút */
+  .links-footnote {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(0, 212, 255, 0.15);
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .links-footnote strong {
+    color: var(--cyan);
+    font-weight: 600;
+  }
 
   /* ===== PASSWORD INPUT ===== */
   .pw-input-wrap {
@@ -602,18 +640,23 @@ async function main() {
 }
 
 function showMain(links) {
-  // Style class cho từng nút: link4m nổi bật nhất, bumx nổi bật vừa, còn lại bình thường
   const linkConfig = {
-    link4m:      { label: "Link4M",      cls: "primary"   },
-    bumx:        { label: "Bumx",        cls: "secondary" },
-    bbmkts:      { label: "Bbmkts",      cls: "normal"    },
-    linkforearn: { label: "LinkForEarn", cls: "normal"    }
+    link4m:      { label: "Link4M",      sub: "Khuyên dùng · Nhanh & ổn định", cls: "primary"   },
+    bumx:        { label: "Bumx",        sub: "Nhanh nhất · Ít bước hơn",      cls: "secondary" },
+    bbmkts:      { label: "Bbmkts",      sub: "Dự phòng khi link chính hết",   cls: "normal"    },
+    linkforearn: { label: "LinkForEarn", sub: "Dự phòng · Cuối cùng",          cls: "normal"    }
   };
 
   const linkBtns = Object.entries(linkConfig).map(([k, cfg]) => {
     const u = links[k];
     if (!u) return "";
-    return `<button class="link-btn ${cfg.cls}" onclick="window.open('${escapeHtml(u)}','_blank')">${escapeHtml(cfg.label)}</button>`;
+    return `
+      <button class="link-btn ${cfg.cls}" onclick="window.open('${escapeHtml(u)}','_blank')">
+        <span class="btn-content">
+          <span class="btn-label">${escapeHtml(cfg.label)}</span>
+          ${cfg.sub ? `<span class="btn-sub">${escapeHtml(cfg.sub)}</span>` : ""}
+        </span>
+      </button>`;
   }).join("");
 
   const hasLinks = linkBtns.length > 0;
@@ -624,8 +667,12 @@ function showMain(links) {
         <h2>
           <span class="icon">⚡</span> Lấy script miễn phí
         </h2>
-        <p class="card-desc">Chọn 1 trong các link dưới đây để lấy Script:</p>
+        <p class="card-desc">Chọn 1 trong các link dưới để lấy script:</p>
         ${linkBtns}
+        <p class="links-footnote">
+          Sau khi vượt link, bạn sẽ được chuyển tới script.<br>
+          Link <strong>Link4M</strong> được khuyên dùng — nếu link không hoạt động, thử <strong>Bumx</strong>.
+        </p>
       </div>
     ` : ""}
 
@@ -729,7 +776,7 @@ function reveal(data) {
     rc.innerHTML = `
       <div class="card">
         <h2><span class="icon">🔗</span> Link gốc</h2>
-        <p class="card-desc">Bấm nút bên dưới để mở trong tab mới:</p>
+        <p class="card-desc">Bấm vào nút để mở tab:</p>
         <a class="open-link" href="${escapeHtml(data.content)}" target="_blank" rel="noopener">
           Mở link gốc
         </a>
