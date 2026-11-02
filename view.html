@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Không có cái gì đâu, bếch...</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 30px auto; padding: 0 16px; background:#0f1116; color:#e6e8eb; }
+  h1 { color:#fff; margin-bottom:6px; }
+  .card { background:#1a1d24; border:1px solid #2a2f39; border-radius:10px; padding:18px; margin-bottom:16px; }
+  button { padding:11px 18px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; width:100%; margin-top:8px; }
+  button:hover { background:#2563eb; }
+  button.alt { background:#4b5563; }
+  button.alt:hover { background:#374151; }
+  input[type=password] { width:100%; padding:9px 11px; background:#0f1116; border:1px solid #2a2f39; border-radius:6px; color:#e6e8eb; font-size:14px; box-sizing:border-box; margin-top:8px; }
+  pre { background:#0f1116; border:1px solid #2a2f39; border-radius:8px; padding:14px; overflow:auto; font-size:13px; white-space:pre-wrap; word-break:break-all; max-height:60vh; }
+  .msg { padding:10px 14px; border-radius:6px; margin:10px 0; font-size:14px; }
+  .msg.err { background:#3b1318; border:1px solid #7f1d1d; color:#fca5a5; }
+  label.remember { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:14px; color:#9aa4b2; cursor:pointer; }
+  .hidden { display:none; }
+  a.open-link { display:inline-block; padding:11px 18px; background:#3b82f6; color:#fff; border-radius:6px; text-decoration:none; font-size:14px; margin-top:8px; }
+  .desc { color:#9aa4b2; font-size:13px; margin-top:4px; }
+</style>
+</head>
+<body>
+
+<h1 id="title">Đang tải...</h1>
+
+<div id="mainCard"></div>
+<div id="resultCard" class="hidden"></div>
+
+<script>
+const WORKER = "https://modgame.phucpro4211.workers.dev";
+const id = new URLSearchParams(location.search).get("id");
+
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+async function main() {
+  if (!id) { document.getElementById("title").textContent = "Thiếu ID"; return; }
+
+  const saved = localStorage.getItem("token_" + id);
+  if (saved) {
+    try {
+      const r = await fetch(WORKER + "/api/reveal", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ token: saved })
+      });
+      const data = await r.json();
+      if (data.success) { reveal(data); return; }
+      localStorage.removeItem("token_" + id);
+    } catch {}
+  }
+
+  try {
+    const r = await fetch(WORKER + "/api/info/" + id);
+    if (!r.ok) {
+      document.getElementById("title").textContent = "Không tìm thấy";
+      document.getElementById("mainCard").innerHTML = '<div class="msg err">ID không tồn tại.</div>';
+      return;
+    }
+    const info = await r.json();
+    document.title = info.title;
+    document.getElementById("title").textContent = info.title;
+    showMain(info.links || {});
+  } catch {
+    document.getElementById("mainCard").innerHTML = '<div class="msg err">Lỗi kết nối</div>';
+  }
+}
+
+function showMain(links) {
+  const labels = {
+    link4m:      "Link4M (khuyên dùng)",
+    bumx:        "Bumx (nhanh nhất)",
+    bbmkts:      "Bbmkts (dự phòng)",
+    linkforearn: "LinkForEarn (dự phòng)"
+  };
+  const linkBtns = Object.entries(labels).map(([k, label]) => {
+    const u = links[k];
+    return u ? `<button onclick="window.open('${escapeHtml(u)}','_blank')">${label}</button>` : "";
+  }).join("");
+
+  document.getElementById("mainCard").innerHTML = `
+    <div class="card">
+      <h2 style="margin-top:0;color:#fff">Lấy script</h2>
+      <p class="desc">Chọn 1 trong các link dưới để vượt quảng cáo:</p>
+      ${linkBtns || '<p class="desc">Video này chưa có link shortener.</p>'}
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0;color:#fff">Hoặc dùng mật khẩu</h2>
+      <input type="password" id="pw" placeholder="Nhập mật khẩu để lấy ngay">
+      <label class="remember"><input type="checkbox" id="remember"> Lưu cho lần sau</label>
+      <button onclick="doVerify()">Xác minh</button>
+      <div id="pwMsg"></div>
+    </div>
+  `;
+}
+
+async function doVerify() {
+  const pw = document.getElementById("pw").value;
+  const remember = document.getElementById("remember").checked;
+  const msg = document.getElementById("pwMsg");
+  msg.innerHTML = "";
+  if (!pw) return;
+  try {
+    const r = await fetch(WORKER + "/api/verify", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ id, password: pw })
+    });
+    const data = await r.json();
+    if (!r.ok) { msg.innerHTML = `<div class="msg err">${data.error || "sai mật khẩu"}</div>`; return; }
+    if (remember && data.token) localStorage.setItem("token_" + id, data.token);
+    reveal(data);
+  } catch { msg.innerHTML = '<div class="msg err">Lỗi kết nối</div>'; }
+}
+
+function reveal(data) {
+  document.getElementById("mainCard").classList.add("hidden");
+  const rc = document.getElementById("resultCard");
+  rc.classList.remove("hidden");
+
+  if (data.type === "script") {
+    rc.innerHTML = `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 style="margin:0;color:#fff">Script</h2>
+          <button class="alt" style="width:auto;padding:8px 14px" onclick="copyScript()">Sao chép</button>
+        </div>
+        <pre id="scriptBox">${escapeHtml(data.content)}</pre>
+      </div>
+    `;
+  } else {
+    rc.innerHTML = `
+      <div class="card">
+        <h2 style="margin-top:0;color:#fff">Link gốc</h2>
+        <p class="desc">Bấm nút để mở trong tab mới:</p>
+        <a class="open-link" href="${escapeHtml(data.content)}" target="_blank" rel="noopener">Mở link gốc</a>
+      </div>
+    `;
+  }
+}
+
+function copyScript() {
+  const el = document.getElementById("scriptBox");
+  const text = el.textContent;
+  navigator.clipboard.writeText(text).catch(() => {
+    const r = document.createRange(); r.selectNode(el);
+    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+    document.execCommand("copy");
+  });
+}
+
+main();
+</script>
+</body>
+</html>
