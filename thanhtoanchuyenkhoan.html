@@ -6,18 +6,11 @@
 <title>💳 Thanh toán chuyển khoản</title>
 <style>
   :root{
-    --bg:#0b0f19;
-    --surface:#111827;
-    --border:rgba(255,255,255,.08);
-    --text:#f9fafb;
-    --muted:#9ca3af;
-    --accent:#3b82f6;
-    --accent-2:#8b5cf6;
-    --success:#22c55e;
-    --warning:#f59e0b;
-    --danger:#ef4444;
-    --radius:18px;
-    --shadow:0 20px 50px rgba(0,0,0,.45);
+    --bg:#0b0f19;--surface:#111827;--border:rgba(255,255,255,.08);
+    --text:#f9fafb;--muted:#9ca3af;
+    --accent:#3b82f6;--accent-2:#8b5cf6;
+    --success:#22c55e;--warning:#f59e0b;--danger:#ef4444;
+    --radius:18px;--shadow:0 20px 50px rgba(0,0,0,.45);
     --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -27,10 +20,8 @@
       radial-gradient(ellipse at 15% 0%,rgba(59,130,246,.18),transparent 55%),
       radial-gradient(ellipse at 90% 20%,rgba(139,92,246,.14),transparent 50%),
       var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    padding:32px 16px 64px;
-    line-height:1.6;
+    color:var(--text);min-height:100vh;
+    padding:32px 16px 64px;line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:640px;margin:0 auto}
@@ -46,47 +37,50 @@
     animation-delay:calc(var(--i,0)*.08s);
   }
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .logo-top{
+    width:68px;height:68px;border-radius:50%;object-fit:cover;
+    display:block;margin:0 auto 14px;
+    border:2px solid rgba(59,130,246,.5);
+    box-shadow:0 0 18px rgba(59,130,246,.35);
+    animation:float 3s ease-in-out infinite;
+  }
   .card{
     background:linear-gradient(160deg,rgba(31,41,55,.85),rgba(17,24,39,.95));
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:28px 24px;
-    backdrop-filter:blur(12px);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:28px 24px;backdrop-filter:blur(12px);
     box-shadow:var(--shadow);
   }
   .title{
     font-size:clamp(1.5rem,4vw,2rem);font-weight:800;
-    letter-spacing:-.03em;
+    letter-spacing:-.03em;text-align:center;
     background:linear-gradient(135deg,#fff 30%,var(--accent) 70%,var(--accent-2));
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     margin-bottom:6px;
+  }
+  .premium-note{
+    text-align:center;
+    background:rgba(59,130,246,.1);
+    border:1px solid rgba(59,130,246,.3);
+    border-radius:12px;
+    padding:10px 14px;
+    font-size:.85rem;
+    color:#93c5fd;
+    margin:14px 0 4px;
+    font-weight:600;
   }
   .warn{
     background:rgba(239,68,68,.1);
     border:1px solid rgba(239,68,68,.3);
     border-radius:14px;
-    padding:14px 16px;
-    font-size:.88rem;
-    color:#fca5a5;
-    margin:16px 0;
-    line-height:1.55;
-  }
-  .info{
-    background:rgba(59,130,246,.08);
-    border:1px solid rgba(59,130,246,.25);
-    border-radius:14px;
-    padding:14px 16px;
-    font-size:.88rem;
-    color:#93c5fd;
-    margin-bottom:18px;
+    padding:14px 16px;font-size:.88rem;
+    color:#fca5a5;margin:16px 0;line-height:1.55;
   }
   .pkg{
     display:flex;justify-content:space-between;align-items:center;
     background:rgba(255,255,255,.04);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:14px 18px;
-    margin-bottom:20px;
+    border:1px solid var(--border);border-radius:14px;
+    padding:14px 18px;margin-bottom:20px;
   }
   .pkg .n{font-size:.95rem;font-weight:600;color:var(--muted)}
   .pkg .p{
@@ -96,21 +90,20 @@
   }
   .fg{margin-bottom:16px}
   .fg label{display:block;font-size:.88rem;font-weight:600;margin-bottom:6px;color:#d1d5db}
-  .fg input,.fg select{
+  .fg input{
     width:100%;padding:13px 15px;border-radius:12px;
     border:1px solid var(--border);
-    background:rgba(0,0,0,.3);
-    color:var(--text);font-family:var(--font);font-size:.95rem;
+    background:rgba(0,0,0,.3);color:var(--text);
+    font-family:var(--font);font-size:.95rem;
     outline:none;transition:.25s;
   }
-  .fg input:focus,.fg select:focus{
+  .fg input:focus{
     border-color:var(--accent);
     box-shadow:0 0 0 3px rgba(59,130,246,.2);
   }
   .fg input::placeholder{color:#6b7280}
   .qr{
-    text-align:center;margin:20px 0;
-    padding:18px;border-radius:16px;
+    text-align:center;margin:20px 0;padding:18px;border-radius:16px;
     background:rgba(255,255,255,.03);
     border:1px dashed var(--border);
   }
@@ -118,12 +111,9 @@
   .qr p{font-size:.85rem;color:var(--muted)}
   .bank{
     background:rgba(255,255,255,.04);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:16px 18px;
-    margin:16px 0 22px;
-    font-size:.9rem;
-    line-height:1.7;
+    border:1px solid var(--border);border-radius:14px;
+    padding:16px 18px;margin:16px 0 22px;
+    font-size:.9rem;line-height:1.7;
   }
   .bank b{color:var(--accent)}
   .btn{
@@ -140,31 +130,33 @@
   .note{
     background:rgba(245,158,11,.08);
     border:1px solid rgba(245,158,11,.25);
-    border-radius:14px;
-    padding:16px 18px;
-    font-size:.85rem;
-    color:#fcd34d;
-    line-height:1.7;
+    border-radius:14px;padding:16px 18px;
+    font-size:.85rem;color:#fcd34d;line-height:1.7;
   }
   .note b{color:#fbbf24}
+  .note a{color:#fbbf24;font-weight:700;text-decoration:underline}
+  .note a:hover{color:#fde68a}
   @media(max-width:600px){
     body{padding:20px 12px 40px}
     .card{padding:22px 16px}
+    .logo-top{width:58px;height:58px}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a href="banggiamatkhau.html" class="back">← Quay lại bảng giá</a>
+  <a href="banggiapremium.html" class="back">← Quay lại bảng giá</a>
 
   <div class="card rise" style="--i:0">
+    <img src="IMG_1851.jpeg" alt="BraKyo Logo" class="logo-top">
     <h2 class="title">💳 Thanh toán chuyển khoản</h2>
+    <div class="premium-note">💡 Premium = bạn có mật khẩu để lấy luôn script</div>
 
     <div class="warn">
       <b>⚠️ Cảnh báo quan trọng:</b><br>
-      • Nhập đúng <b>Tên Discord</b>. Nếu sai hoặc không tìm thấy bạn trong server, tiền <b>KHÔNG ĐƯỢC HOÀN LẠI</b>! ❌<br>
+      • Nhập đúng <b>Tên TikTok</b>. Nếu sai hoặc không tìm thấy bạn, tiền <b>KHÔNG ĐƯỢC HOÀN LẠI</b>! ❌<br>
       • <b>📸 Bắt buộc chụp màn hình biên lai</b> sau khi chuyển khoản để làm bằng chứng! ✅<br>
-      • <b>📝 Ghi rõ nội dung</b>: Premium + Tên Discord — thiếu nội dung sẽ KHÔNG xác nhận được! ❌
+      • <b>📝 Ghi rõ nội dung</b>: Premium + Tên TikTok — thiếu nội dung sẽ KHÔNG xác nhận được! ❌
     </div>
 
     <div class="pkg">
@@ -173,35 +165,35 @@
     </div>
 
     <div class="fg">
-      <label for="discord-name">💬 Tên Discord của bạn</label>
-      <input type="text" id="discord-name" placeholder="VD: tenuser#1234 hoặc tenuser">
+      <label for="discord-name">💬 Tên TikTok của bạn</label>
+      <input type="text" id="discord-name" placeholder="VD: @tenuser">
     </div>
 
     <div class="qr">
-      <img src="qr-mbbank.png" alt="QR MB Bank">
+      <img src="qr-zalopay.jpeg" alt="QR ZaloPay">
       <p>📸 Quét mã QR để chuyển khoản — nhớ chụp hình biên lai!</p>
     </div>
 
     <div class="bank">
-      <p><b>🏦 Ngân hàng:</b> MB Bank</p>
-      <p><b>📌 Số tài khoản:</b> 0383292439</p>
-      <p><b>👤 Chủ tài khoản:</b> NGUYEN GIA BINH</p>
+      <p><b>🏦 Ngân hàng:</b> ZaloPay </p>
+      <p><b>📌 Số tài khoản:</b> 99ZP26165M47713752 </p>
+      <p><b>👤 Chủ tài khoản:</b> ZALOPAY_NGO XUAN PHUC </p>
       <p><b>💵 Số tiền:</b> <span id="so-tien">10.000đ</span></p>
-      <p><b>📝 Nội dung:</b> Premium + Tên Discord của bạn</p>
+      <p><b>📝 Nội dung:</b> Premium + Tên TikTok của bạn</p>
     </div>
 
     <button class="btn" onclick="xacNhanChuyenKhoan()">✅ Tôi đã chuyển khoản & đã chụp hình</button>
 
     <div class="note">
       <b>📌 Lưu ý quan trọng:</b><br>
-      1. Chuyển khoản đúng số tiền trên<br>
-      2. Ghi nội dung: Premium + Tên Discord — <b>thiếu nội dung sẽ không xác nhận được</b><br>
+      1. Chuyển khoản đúng số tiền gói đã chọn<br>
+      2. Ghi nội dung: Premium + Tên TikTok — <b>thiếu nội dung sẽ không xác nhận được</b><br>
       3. <b>📸 Chụp hình biên lai ngay sau khi chuyển</b> — đây là bằng chứng quan trọng nhất nếu có sự cố<br>
-      4. Gửi hình biên lai vào Discord để được xác nhận nhanh hơn<br>
+      4. Gửi hình biên lai vào TikTok nếu muốn xác nhận nhanh hơn<br>
       5. Sau khi chuyển khoản, vui lòng đợi <b>từ vài phút đến sớm nhất có thể</b><br>
-      6. Chủ server sẽ kiểm tra tên Discord và cấp Premium cho bạn ngay sau khi xác nhận ✅<br>
-      7. Nhập sai tên Discord → tiền sẽ KHÔNG được hoàn lại<br>
-      8. Chờ quá lâu, liên hệ: <b>0383292439</b>
+      6. Chủ web sẽ kiểm tra tên TikTok và cấp Premium cho bạn ngay sau khi xác nhận ✅<br>
+      7. Nhập sai tên TikTok ❌ → tiền sẽ KHÔNG được hoàn lại<br>
+      8. Chờ quá lâu, liên hệ: <a href="https://t.me/kenjobraly" target="_blank" rel="noopener">braly</a>
     </div>
   </div>
 </div>
@@ -226,10 +218,10 @@ document.getElementById("so-tien").innerText = data.gia;
 async function xacNhanChuyenKhoan(){
   const discordName = document.getElementById("discord-name").value.trim();
   if(!discordName){
-    alert("⚠️ Vui lòng nhập Tên Discord của bạn!");
+    alert("⚠️ Vui lòng nhập Tên TikTok của bạn!");
     return;
   }
-  if(!confirm(`⚠️ KIỂM TRA KỸ:\n\nTên Discord: ${discordName}\nSố tiền: ${data.gia}\n\n📸 Đã chụp hình biên lai chuyển khoản chưa?\n📝 Đã ghi đúng nội dung: Premium + ${discordName} chưa?\n\nNếu nhập sai tên Discord hoặc không có bằng chứng → TIỀN SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận đã chuyển khoản?`)){
+  if(!confirm(`⚠️ KIỂM TRA KỸ:\n\nTên TikTok: ${discordName}\nSố tiền: ${data.gia}\n\n📸 Đã chụp hình biên lai chuyển khoản chưa?\n📝 Đã ghi đúng nội dung: Premium + ${discordName} chưa?\n\nNếu nhập sai tên TikTok hoặc không có bằng chứng → TIỀN SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận đã chuyển khoản?`)){
     return;
   }
   try {
@@ -241,22 +233,22 @@ async function xacNhanChuyenKhoan(){
           title: "💳 CHUYỂN KHOẢN MỚI",
           color: 56258,
           fields: [
-            { name: "👤 Tên Discord", value: discordName, inline: false },
+            { name: "👤 Tên TikTok", value: TikTokName, inline: false },
             { name: "💰 Số tiền", value: data.gia, inline: true },
             { name: "📦 Gói đăng ký", value: data.ten, inline: true },
-            { name: "📝 Nội dung", value: "Premium + " + discordName, inline: false },
-            { name: "🏦 Ngân hàng", value: "MB Bank — 0383292439", inline: false }
+            { name: "📝 Nội dung", value: "Premium + " + TikTokName, inline: false },
+            { name: "🏦 Ngân hàng", value: "ZaloPay — 99ZP26165M47713752", inline: false }
           ],
           timestamp: new Date().toISOString(),
-          footer: { text: "ATRAS | GIABÌNH — Hệ thống tự động" }
+          footer: { text: "BraKyo — Hệ thống tự động" }
         }]
       })
     });
   } catch (err) {
-    alert("⚠️ Lỗi kết nối! Vui lòng gửi Tên Discord cho @dobinhl12 trên Discord nhé!");
+    alert("⚠️ Lỗi kết nối! Vui lòng gửi Tên TikTok cho @brakyo trên TikTok nhé!");
     return;
   }
-  alert("✅ Cảm ơn bạn! Vui lòng gửi hình ảnh biên lai vào Discord để chúng tôi xác nhận nhanh nhất.\nChúng tôi sẽ cấp Premium cho bạn ngay sau khi kiểm tra. Cảm ơn bạn đã ủng hộ! 💖");
+  alert("✅ Cảm ơn bạn! Vui lòng gửi hình ảnh biên lai vào TikTok để chúng tôi xác nhận nhanh nhất.\nChúng tôi sẽ cấp Premium cho bạn ngay sau khi kiểm tra. Cảm ơn bạn đã ủng hộ! 💖");
   document.getElementById("discord-name").value = "";
 }
 </script>
