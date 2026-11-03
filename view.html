@@ -593,8 +593,11 @@
     <h1 id="title">Đang tải...</h1>
     <p class="subtitle">Chọn link bên dưới hoặc dùng mật khẩu để lấy script</p>
 
-    <!-- ===== CARD: TẠI SAO NÊN CHỌN PREMIUM ===== -->
-    <div class="card" style="animation-delay: 0.22s;">
+    <div id="mainCard"></div>
+    <div id="resultCard"></div>
+
+    <!-- ===== CARD: TẠI SAO NÊN CHỌN PREMIUM (CHUYỂN XUỐNG DƯỚI) ===== -->
+    <div class="card" style="animation-delay: 0.3s;">
       <h2>
         <span class="icon">💎</span> Tại sao nên chọn Premium?
       </h2>
@@ -605,10 +608,15 @@
         <li>Truy cập kho script chất lượng cao, được cập nhật liên tục</li>
         <li>Hỗ trợ trực tiếp qua TikTok khi có vấn đề phát sinh</li>
       </ul>
+      
+      <!-- NÚT DẪN ĐẾN BẢNG GIÁ PREMIUM -->
+      <div style="margin-top: 18px;">
+        <a href="banggiamatkhau.html" class="btn-primary" style="display: flex; justify-content: center; align-items: center; text-decoration: none;">
+          💳 Xem bảng giá Premium
+        </a>
+      </div>
     </div>
-
-    <div id="mainCard"></div>
-    <div id="resultCard"></div>
+    
   </div>
 </div>
 
