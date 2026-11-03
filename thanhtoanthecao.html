@@ -6,18 +6,11 @@
 <title>🎫 Thanh toán bằng thẻ cào</title>
 <style>
   :root{
-    --bg:#0b0f19;
-    --surface:#111827;
-    --border:rgba(255,255,255,.08);
-    --text:#f9fafb;
-    --muted:#9ca3af;
-    --accent:#3b82f6;
-    --accent-2:#8b5cf6;
-    --success:#22c55e;
-    --warning:#f59e0b;
-    --danger:#ef4444;
-    --radius:18px;
-    --shadow:0 20px 50px rgba(0,0,0,.45);
+    --bg:#0b0f19;--surface:#111827;--border:rgba(255,255,255,.08);
+    --text:#f9fafb;--muted:#9ca3af;
+    --accent:#3b82f6;--accent-2:#8b5cf6;
+    --success:#22c55e;--warning:#f59e0b;--danger:#ef4444;
+    --radius:18px;--shadow:0 20px 50px rgba(0,0,0,.45);
     --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -27,10 +20,8 @@
       radial-gradient(ellipse at 10% 5%,rgba(59,130,246,.18),transparent 55%),
       radial-gradient(ellipse at 90% 10%,rgba(139,92,246,.14),transparent 50%),
       var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    padding:32px 16px 64px;
-    line-height:1.6;
+    color:var(--text);min-height:100vh;
+    padding:32px 16px 64px;line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:640px;margin:0 auto}
@@ -46,47 +37,57 @@
     animation-delay:calc(var(--i,0)*.08s);
   }
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .logo-top{
+    width:68px;height:68px;border-radius:50%;object-fit:cover;
+    display:block;margin:0 auto 14px;
+    border:2px solid rgba(59,130,246,.5);
+    box-shadow:0 0 18px rgba(59,130,246,.35);
+    animation:float 3s ease-in-out infinite;
+  }
   .card{
     background:linear-gradient(160deg,rgba(31,41,55,.85),rgba(17,24,39,.95));
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:28px 24px;
-    backdrop-filter:blur(12px);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:28px 24px;backdrop-filter:blur(12px);
     box-shadow:var(--shadow);
   }
   .title{
     font-size:clamp(1.5rem,4vw,2rem);font-weight:800;
-    letter-spacing:-.03em;
+    letter-spacing:-.03em;text-align:center;
     background:linear-gradient(135deg,#fff 30%,var(--accent) 70%,var(--accent-2));
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     margin-bottom:6px;
+  }
+  .premium-note{
+    text-align:center;
+    background:rgba(59,130,246,.1);
+    border:1px solid rgba(59,130,246,.3);
+    border-radius:12px;
+    padding:10px 14px;
+    font-size:.85rem;
+    color:#93c5fd;
+    margin:14px 0 4px;
+    font-weight:600;
   }
   .warn{
     background:rgba(239,68,68,.1);
     border:1px solid rgba(239,68,68,.3);
     border-radius:14px;
-    padding:14px 16px;
-    font-size:.88rem;
-    color:#fca5a5;
-    margin:16px 0;
-    line-height:1.55;
+    padding:14px 16px;font-size:.88rem;
+    color:#fca5a5;margin:16px 0;line-height:1.55;
   }
   .info{
     background:rgba(59,130,246,.08);
     border:1px solid rgba(59,130,246,.25);
     border-radius:14px;
-    padding:14px 16px;
-    font-size:.88rem;
-    color:#93c5fd;
-    margin-bottom:18px;
+    padding:14px 16px;font-size:.88rem;
+    color:#93c5fd;margin-bottom:18px;
   }
   .pkg{
     display:flex;justify-content:space-between;align-items:center;
     background:rgba(255,255,255,.04);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:14px 18px;
-    margin-bottom:20px;
+    border:1px solid var(--border);border-radius:14px;
+    padding:14px 18px;margin-bottom:20px;
   }
   .pkg .n{font-size:.95rem;font-weight:600;color:var(--muted)}
   .pkg .p{
@@ -99,8 +100,8 @@
   .fg input,.fg select{
     width:100%;padding:13px 15px;border-radius:12px;
     border:1px solid var(--border);
-    background:rgba(0,0,0,.3);
-    color:var(--text);font-family:var(--font);font-size:.95rem;
+    background:rgba(0,0,0,.3);color:var(--text);
+    font-family:var(--font);font-size:.95rem;
     outline:none;transition:.25s;
   }
   .fg input:focus,.fg select:focus{
@@ -119,32 +120,59 @@
   }
   .btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(59,130,246,.45);filter:brightness(1.08)}
   .btn:active{transform:translateY(0)}
+  .alt-pay{
+    background:linear-gradient(160deg,rgba(0,168,232,.12),rgba(17,24,39,.9));
+    border:1px solid rgba(0,168,232,.35);
+    border-radius:14px;
+    padding:18px;
+    margin-bottom:20px;
+    text-align:center;
+  }
+  .alt-pay .alt-title{
+    font-size:1rem;font-weight:700;
+    color:#7dd3fc;margin-bottom:8px;
+  }
+  .alt-pay p{font-size:.85rem;color:var(--muted);margin:4px 0}
+  .alt-pay p b{color:#93c5fd}
+  .alt-pay .alt-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    width:100%;padding:12px 18px;border-radius:12px;
+    background:linear-gradient(135deg,#00a8e8,#0070ba);
+    color:#fff;font-weight:700;font-size:.9rem;text-decoration:none;
+    margin-top:12px;transition:.25s;
+    box-shadow:0 6px 20px rgba(0,168,232,.3);
+  }
+  .alt-pay .alt-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
   .note{
     background:rgba(245,158,11,.08);
     border:1px solid rgba(245,158,11,.25);
-    border-radius:14px;
-    padding:16px 18px;
-    font-size:.85rem;
-    color:#fcd34d;
-    line-height:1.7;
+    border-radius:14px;padding:16px 18px;
+    font-size:.85rem;color:#fcd34d;line-height:1.7;
   }
   .note b{color:#fbbf24}
+  .note a{color:#fbbf24;font-weight:700;text-decoration:underline}
+  .note a:hover{color:#fde68a}
   @media(max-width:600px){
     body{padding:20px 12px 40px}
     .card{padding:22px 16px}
+    .logo-top{width:58px;height:58px}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a href="banggiamatkhau.html" class="back">← Quay lại bảng giá</a>
+  <a href="banggiapremium.html" class="back">← Quay lại bảng giá</a>
 
   <div class="card rise" style="--i:0">
+    <img src="IMG_1851.jpeg" alt="BraKyo Logo" class="logo-top">
     <h2 class="title">🎫 Thanh toán bằng thẻ cào</h2>
+    <div class="premium-note">💡 Premium = bạn có mật khẩu để lấy luôn script</div>
 
     <div class="warn">
       <b>⚠️ Cảnh báo quan trọng:</b><br>
-      Nhập đúng <b>Tên Discord</b>. Nếu sai hoặc không tìm thấy bạn trong server, thẻ sẽ <b>KHÔNG ĐƯỢC HOÀN LẠI</b> — coi như mất thẻ! ❌
+      • Nhập đúng <b>Tên TikTok</b>. Nếu sai hoặc không tìm thấy bạn, tiền <b>KHÔNG ĐƯỢC HOÀN LẠI</b>! ❌<br>
+      • <b>📸 Bắt buộc chụp màn hình biên lai</b> sau khi chuyển khoản để làm bằng chứng! ✅<br>
+      • <b>📝 Ghi rõ nội dung</b>: Premium + Tên TikTok — thiếu nội dung sẽ KHÔNG xác nhận được! ❌
     </div>
 
     <div class="info">
@@ -157,8 +185,8 @@
     </div>
 
     <div class="fg">
-      <label for="discord-name">💬 Tên Discord của bạn</label>
-      <input type="text" id="discord-name" placeholder="VD: tenuser#1234 hoặc tenuser">
+      <label for="discord-name">💬 Tên TikTok của bạn</label>
+      <input type="text" id="discord-name" placeholder="VD: @tenuser">
     </div>
 
     <div class="fg">
@@ -183,19 +211,30 @@
 
     <button class="btn" onclick="guiTheCao()">✅ Gửi thẻ & nhận Premium</button>
 
+    <div class="alt-pay">
+      <div class="alt-title">💡 Không có thẻ Viettel?</div>
+      <p>Bạn có thể thanh toán qua <b>ZaloPay</b> — nhanh hơn, không cần thẻ cào!</p>
+      <p><b>🏦 ZaloPay:</b> 99ZP26165M47713752</p>
+      <p><b>👤 Chủ TK:</b> ZALOPAY_NGO XUAN PHUC</p>
+      <a href="banggiapremium.html" class="alt-btn">💳 Xem các gói thanh toán ZaloPay</a>
+    </div>
+
     <div class="note">
       <b>📌 Lưu ý quan trọng:</b><br>
-      • Kiểm tra kỹ thông tin trước khi gửi — thông tin sai sẽ không được hoàn lại<br>
-      • Sau khi gửi, vui lòng đợi từ vài phút đến sớm nhất có thể<br>
-      • Chúng tôi sẽ kiểm tra thông tin và cấp Premium cho bạn ✅<br>
-      • Tên Discord sai / không tìm thấy trong server → thẻ sẽ KHÔNG được hoàn lại<br>
-      • Có vấn đề, liên hệ: <b>0383292439</b>
+      1. Chọn đúng mệnh giá thẻ theo gói đã chọn<br>
+      2. Ghi nội dung: Premium + Tên TikTok — <b>thiếu nội dung sẽ không xác nhận được</b><br>
+      3. <b>📸 Chụp hình ảnh thẻ cào ngay sau khi gửi</b> — đây là bằng chứng quan trọng nhất nếu có sự cố<br>
+      4. Gửi hình ảnh thẻ vào TikTok nếu muốn xác nhận nhanh hơn<br>
+      5. Sau khi gửi thẻ, vui lòng đợi <b>từ vài phút đến sớm nhất có thể</b><br>
+      6. Chủ web sẽ kiểm tra tên TikTok và cấp Premium cho bạn ngay sau khi xác nhận ✅<br>
+      7. Nhập sai tên TikTok ❌ → thẻ sẽ KHÔNG được hoàn lại<br>
+      8. Chờ quá lâu, liên hệ: <a href="https://t.me/kenjobraly" target="_blank" rel="noopener">braly</a>
     </div>
   </div>
 </div>
 
 <script>
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1558195964672737451/hcA9wxAGuCUkfUu_LYEH9Ti4bQBA13dHKOCejdmRrIegPJs8OGlHFUSthqchuzxWRO9V";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1536159293357821972/tvWEUdMThlp30_zyh-WVXIbx02siEenJXSmxIPSrvxZe7nYsdIP3Li7hAuGYLGAp5HHo";
 
 const goiData = {
   "premium-2t-the": { ten: "Premium — 2 tháng", gia: "20.000đ", menhGia: "20000" },
@@ -218,14 +257,14 @@ async function guiTheCao(){
   const menhGia = document.getElementById("menh-gia").value;
 
   if(!discordName){
-    alert("⚠️ Vui lòng nhập Tên Discord của bạn!");
+    alert("⚠️ Vui lòng nhập Tên TikTok của bạn!");
     return;
   }
   if(!seri || !maThe || !menhGia){
     alert("⚠️ Vui lòng điền đầy đủ thông tin thẻ cào!");
     return;
   }
-  if(!confirm(`⚠️ KIỂM TRA KỸ TRƯỚC KHI GỬI:\n\nTên Discord: ${discordName}\nMệnh giá: ${parseInt(menhGia).toLocaleString()}đ\nSeri: ${seri}\nMã thẻ: ${maThe}\n\nNếu nhập sai tên Discord hoặc không tìm thấy bạn trong server → THẺ SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận gửi?`)){
+  if(!confirm(`⚠️ KIỂM TRA KỸ TRƯỚC KHI GỬI:\n\nTên TikTok: ${discordName}\nMệnh giá: ${parseInt(menhGia).toLocaleString()}đ\nSeri: ${seri}\nMã thẻ: ${maThe}\n\nNếu nhập sai tên TikTok hoặc không tìm thấy bạn → THẺ SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận gửi?`)){
     return;
   }
   try {
@@ -233,23 +272,24 @@ async function guiTheCao(){
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        username: discordName + " — " + parseInt(menhGia).toLocaleString() + "đ",
         embeds: [{
           title: "🎫 THẺ CÀO MỚI ĐƯỢC GỬI",
           color: 16766720,
           fields: [
-            { name: "👤 Tên Discord", value: discordName, inline: false },
+            { name: "👤 Tên TikTok", value: discordName, inline: false },
             { name: "💰 Mệnh giá", value: parseInt(menhGia).toLocaleString() + "đ", inline: true },
             { name: "📝 Số Seri", value: "`" + seri + "`", inline: true },
             { name: "🔢 Mã thẻ", value: "`" + maThe + "`", inline: true },
             { name: "📦 Gói đăng ký", value: data.ten + " — " + data.gia, inline: false }
           ],
           timestamp: new Date().toISOString(),
-          footer: { text: "ATRAS | GIABÌNH — Hệ thống tự động" }
+          footer: { text: "BraKyo — Hệ thống tự động" }
         }]
       })
     });
   } catch (err) {
-    alert("⚠️ Lỗi kết nối! Vui lòng gửi lại thông tin thẻ cho @dobinhl12 trên Discord nhé!");
+    alert("⚠️ Lỗi kết nối! Vui lòng gửi Tên TikTok cho @zankyo2114 hoặc @kenjobraly trên TikTok nhé!");
     return;
   }
   alert("✅ Thẻ đã được gửi thành công!\nChúng tôi sẽ kiểm tra thông tin và cấp Premium cho bạn trong thời gian sớm nhất.\nCảm ơn bạn đã ủng hộ! 💖");
