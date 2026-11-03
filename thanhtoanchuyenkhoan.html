@@ -175,9 +175,9 @@
     </div>
 
     <div class="bank">
-      <p><b>🏦 Ngân hàng:</b> ZaloPay </p>
-      <p><b>📌 Số tài khoản:</b> 99ZP26165M47713752 </p>
-      <p><b>👤 Chủ tài khoản:</b> ZALOPAY_NGO XUAN PHUC </p>
+      <p><b>🏦 Ngân hàng:</b> ZaloPay</p>
+      <p><b>📌 Số tài khoản:</b> 99ZP26165M47713752</p>
+      <p><b>👤 Chủ tài khoản:</b> ZALOPAY_NGO XUAN PHUC</p>
       <p><b>💵 Số tiền:</b> <span id="so-tien">10.000đ</span></p>
       <p><b>📝 Nội dung:</b> Premium + Tên TikTok của bạn</p>
     </div>
@@ -199,7 +199,7 @@
 </div>
 
 <script>
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1558199951627133092/TusBBeifQO6q40ZSJF6w-Hc3Gk9LSl7KkyMGViY5ocze2udvz7-KdOqC1s9s4iS9JTXv";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1536159293357821972/tvWEUdMThlp30_zyh-WVXIbx02siEenJXSmxIPSrvxZe7nYsdIP3Li7hAuGYLGAp5HHo";
 
 const goiData = {
   "premium-2t-ck": { ten: "Premium — 2 tháng", gia: "10.000đ" },
@@ -229,14 +229,15 @@ async function xacNhanChuyenKhoan(){
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        username: discordName + " — " + data.gia,
         embeds: [{
           title: "💳 CHUYỂN KHOẢN MỚI",
           color: 56258,
           fields: [
-            { name: "👤 Tên TikTok", value: TikTokName, inline: false },
+            { name: "👤 Tên TikTok", value: discordName, inline: false },
             { name: "💰 Số tiền", value: data.gia, inline: true },
             { name: "📦 Gói đăng ký", value: data.ten, inline: true },
-            { name: "📝 Nội dung", value: "Premium + " + TikTokName, inline: false },
+            { name: "📝 Nội dung", value: "Premium + " + discordName, inline: false },
             { name: "🏦 Ngân hàng", value: "ZaloPay — 99ZP26165M47713752", inline: false }
           ],
           timestamp: new Date().toISOString(),
@@ -245,7 +246,7 @@ async function xacNhanChuyenKhoan(){
       })
     });
   } catch (err) {
-    alert("⚠️ Lỗi kết nối! Vui lòng gửi Tên TikTok cho @brakyo trên TikTok nhé!");
+    alert("⚠️ Lỗi kết nối! Vui lòng gửi Tên TikTok cho @zankyo2114 hoặc @kenjobraly trên TikTok nhé!");
     return;
   }
   alert("✅ Cảm ơn bạn! Vui lòng gửi hình ảnh biên lai vào TikTok để chúng tôi xác nhận nhanh nhất.\nChúng tôi sẽ cấp Premium cho bạn ngay sau khi kiểm tra. Cảm ơn bạn đã ủng hộ! 💖");
