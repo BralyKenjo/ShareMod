@@ -145,7 +145,7 @@
 </head>
 <body>
 <div class="wrap">
-  <a href="banggiapremium.html" class="back">← Quay lại bảng giá</a>
+  <a href="banggiamatkhau.html" class="back">← Quay lại bảng giá</a>
 
   <div class="card rise" style="--i:0">
     <img src="IMG_1851.jpeg" alt="BraKyo Logo" class="logo-top">
@@ -154,7 +154,7 @@
 
     <div class="warn">
       <b>⚠️ Cảnh báo quan trọng:</b><br>
-      • Nhập đúng <b>Tên TikTok</b>. Nếu sai hoặc không tìm thấy bạn, tiền <b>KHÔNG ĐƯỢC HOÀN LẠI</b>! ❌<br>
+      • Nhập đúng <b>Tên TikTok</b>. Nếu sai hoặc không tìm thấy trên TikTok, tiền <b>KHÔNG ĐƯỢC HOÀN LẠI</b>! ❌<br>
       • <b>📸 Bắt buộc chụp màn hình biên lai</b> sau khi chuyển khoản để làm bằng chứng! ✅<br>
       • <b>📝 Ghi rõ nội dung</b>: Premium + Tên TikTok — thiếu nội dung sẽ KHÔNG xác nhận được! ❌
     </div>
@@ -193,13 +193,13 @@
       5. Sau khi chuyển khoản, vui lòng đợi <b>từ vài phút đến sớm nhất có thể</b><br>
       6. Chủ web sẽ kiểm tra tên TikTok và cấp Premium cho bạn ngay sau khi xác nhận ✅<br>
       7. Nhập sai tên TikTok ❌ → tiền sẽ KHÔNG được hoàn lại<br>
-      8. Chờ quá lâu, liên hệ: <a href="https://t.me/kenjobraly" target="_blank" rel="noopener">braly</a>
+      8. Có vấn đề, liên hệ: <a href="https://t.me/kenjobraly" target="_blank" rel="noopener">braly</a>
     </div>
   </div>
 </div>
 
 <script>
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1536159293357821972/tvWEUdMThlp30_zyh-WVXIbx02siEenJXSmxIPSrvxZe7nYsdIP3Li7hAuGYLGAp5HHo";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1536159293357821972/tvWEUdMThlp30_zyh0WVXIbx02siEenJXSmxIPSrvxZe7nYsdIP3Li7hAuGYLGAp5HHo";
 
 const goiData = {
   "premium-2t-ck": { ten: "Premium — 2 tháng", gia: "10.000đ" },
@@ -221,11 +221,11 @@ async function xacNhanChuyenKhoan(){
     alert("⚠️ Vui lòng nhập Tên TikTok của bạn!");
     return;
   }
-  if(!confirm(`⚠️ KIỂM TRA KỸ:\n\nTên TikTok: ${discordName}\nSố tiền: ${data.gia}\n\n📸 Đã chụp hình biên lai chuyển khoản chưa?\n📝 Đã ghi đúng nội dung: Premium + ${discordName} chưa?\n\nNếu nhập sai tên TikTok hoặc không có bằng chứng → TIỀN SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận đã chuyển khoản?`)){
+  if(!confirm(`⚠️ KIỂM TRA KỸ:\n\nTên TikTok: ${discordName}\nSố tiền: ${data.gia}\n\n📸 Đã chụp hình biên lai chuyển khoản chưa?\n📝 Đã ghi đúng nội dung: Premium + ${discordName} chưa?\n\nNếu nhập sai tên TikTok hoặc không tìm thấy trên TikTok → TIỀN SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận đã chuyển khoản?`)){
     return;
   }
   try {
-    await fetch(DISCORD_WEBHOOK_URL, {
+    const res = await fetch(DISCORD_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -245,8 +245,15 @@ async function xacNhanChuyenKhoan(){
         }]
       })
     });
+
+    if(!res.ok){
+      const errText = await res.text();
+      console.error("Webhook error:", res.status, errText);
+      throw new Error("Webhook " + res.status);
+    }
   } catch (err) {
-    alert("⚠️ Lỗi kết nối! Vui lòng gửi Tên TikTok cho @zankyo2114 hoặc @kenjobraly trên TikTok nhé!");
+    console.error("Fetch error:", err);
+    alert("⚠️ Không gửi được! Webhook có thể bị lỗi hoặc mạng chặn Discord.\nVui lòng gửi Tên TikTok cho @zankyo2114 hoặc @kenjobraly trên TikTok nhé!");
     return;
   }
   alert("✅ Cảm ơn bạn! Vui lòng gửi hình ảnh biên lai vào TikTok để chúng tôi xác nhận nhanh nhất.\nChúng tôi sẽ cấp Premium cho bạn ngay sau khi kiểm tra. Cảm ơn bạn đã ủng hộ! 💖");
