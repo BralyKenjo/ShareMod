@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>💳 Thanh toán chuyển khoản</title>
+<title>🎫 Thanh toán bằng thẻ cào</title>
 <style>
   :root{
     --bg:#0b0f19;--surface:#111827;--border:rgba(255,255,255,.08);
@@ -17,8 +17,8 @@
   body{
     font-family:var(--font);
     background:
-      radial-gradient(ellipse at 15% 0%,rgba(59,130,246,.18),transparent 55%),
-      radial-gradient(ellipse at 90% 20%,rgba(139,92,246,.14),transparent 50%),
+      radial-gradient(ellipse at 10% 5%,rgba(59,130,246,.18),transparent 55%),
+      radial-gradient(ellipse at 90% 10%,rgba(139,92,246,.14),transparent 50%),
       var(--bg);
     color:var(--text);min-height:100vh;
     padding:32px 16px 64px;line-height:1.6;
@@ -76,6 +76,13 @@
     padding:14px 16px;font-size:.88rem;
     color:#fca5a5;margin:16px 0;line-height:1.55;
   }
+  .info{
+    background:rgba(59,130,246,.08);
+    border:1px solid rgba(59,130,246,.25);
+    border-radius:14px;
+    padding:14px 16px;font-size:.88rem;
+    color:#93c5fd;margin-bottom:18px;
+  }
   .pkg{
     display:flex;justify-content:space-between;align-items:center;
     background:rgba(255,255,255,.04);
@@ -90,32 +97,18 @@
   }
   .fg{margin-bottom:16px}
   .fg label{display:block;font-size:.88rem;font-weight:600;margin-bottom:6px;color:#d1d5db}
-  .fg input{
+  .fg input,.fg select{
     width:100%;padding:13px 15px;border-radius:12px;
     border:1px solid var(--border);
     background:rgba(0,0,0,.3);color:var(--text);
     font-family:var(--font);font-size:.95rem;
     outline:none;transition:.25s;
   }
-  .fg input:focus{
+  .fg input:focus,.fg select:focus{
     border-color:var(--accent);
     box-shadow:0 0 0 3px rgba(59,130,246,.2);
   }
   .fg input::placeholder{color:#6b7280}
-  .qr{
-    text-align:center;margin:20px 0;padding:18px;border-radius:16px;
-    background:rgba(255,255,255,.03);
-    border:1px dashed var(--border);
-  }
-  .qr img{max-width:220px;width:100%;border-radius:12px;display:block;margin:0 auto 10px}
-  .qr p{font-size:.85rem;color:var(--muted)}
-  .bank{
-    background:rgba(255,255,255,.04);
-    border:1px solid var(--border);border-radius:14px;
-    padding:16px 18px;margin:16px 0 22px;
-    font-size:.9rem;line-height:1.7;
-  }
-  .bank b{color:var(--accent)}
   .btn{
     display:flex;align-items:center;justify-content:center;gap:8px;
     width:100%;padding:15px 20px;border-radius:14px;border:none;cursor:pointer;
@@ -127,6 +120,29 @@
   }
   .btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(59,130,246,.45);filter:brightness(1.08)}
   .btn:active{transform:translateY(0)}
+  .alt-pay{
+    background:linear-gradient(160deg,rgba(0,168,232,.12),rgba(17,24,39,.9));
+    border:1px solid rgba(0,168,232,.35);
+    border-radius:14px;
+    padding:18px;
+    margin-bottom:20px;
+    text-align:center;
+  }
+  .alt-pay .alt-title{
+    font-size:1rem;font-weight:700;
+    color:#7dd3fc;margin-bottom:8px;
+  }
+  .alt-pay p{font-size:.85rem;color:var(--muted);margin:4px 0}
+  .alt-pay p b{color:#93c5fd}
+  .alt-pay .alt-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    width:100%;padding:12px 18px;border-radius:12px;
+    background:linear-gradient(135deg,#00a8e8,#0070ba);
+    color:#fff;font-weight:700;font-size:.9rem;text-decoration:none;
+    margin-top:12px;transition:.25s;
+    box-shadow:0 6px 20px rgba(0,168,232,.3);
+  }
+  .alt-pay .alt-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
   .note{
     background:rgba(245,158,11,.08);
     border:1px solid rgba(245,158,11,.25);
@@ -149,19 +165,23 @@
 
   <div class="card rise" style="--i:0">
     <img src="IMG_1851.jpeg" alt="BraKyo Logo" class="logo-top">
-    <h2 class="title">💳 Thanh toán chuyển khoản</h2>
+    <h2 class="title">🎫 Thanh toán bằng thẻ cào</h2>
     <div class="premium-note">💡 Premium = bạn có mật khẩu để lấy luôn script</div>
 
     <div class="warn">
       <b>⚠️ Cảnh báo quan trọng:</b><br>
-      • Nhập đúng <b>Tên TikTok</b>. Nếu sai hoặc không tìm thấy trên TikTok, tiền <b>KHÔNG ĐƯỢC HOÀN LẠI</b>! ❌<br>
-      • <b>📸 Bắt buộc chụp màn hình biên lai</b> sau khi chuyển khoản để làm bằng chứng! ✅<br>
-      • <b>📝 Ghi rõ nội dung</b>: Premium + Tên TikTok — thiếu nội dung sẽ KHÔNG xác nhận được! ❌
+      • Nhập đúng <b>Tên TikTok</b>. Nếu sai hoặc không tìm thấy trên TikTok, thẻ <b>KHÔNG ĐƯỢC HOÀN LẠI</b> — coi như mất thẻ! ❌<br>
+      • <b>📸 Bắt buộc chụp màn hình thẻ cào</b> sau khi gửi để làm bằng chứng! ✅<br>
+      • <b>📝 Ghi rõ thông tin</b>: Premium + Tên TikTok — thiếu thông tin sẽ KHÔNG xác nhận được! ❌
+    </div>
+
+    <div class="info">
+      <b>ℹ️ Chú ý:</b> Chỉ nhận thẻ cào <b style="color:#fca5a5">VIETTEL</b>. Thẻ nhà mạng khác không hợp lệ ❌
     </div>
 
     <div class="pkg">
-      <div class="n" id="goi-ten">Premium</div>
-      <div class="p" id="goi-gia">10.000đ</div>
+      <div class="n" id="goi-ten">Premium — 2 tháng</div>
+      <div class="p" id="goi-gia">20.000đ</div>
     </div>
 
     <div class="fg">
@@ -169,30 +189,45 @@
       <input type="text" id="discord-name" placeholder="VD: @tenuser">
     </div>
 
-    <div class="qr">
-      <img src="qr-zalopay.jpeg" alt="QR ZaloPay">
-      <p>📸 Quét mã QR để chuyển khoản — nhớ chụp hình biên lai!</p>
+    <div class="fg">
+      <label for="menh-gia">💰 Chọn mệnh giá thẻ</label>
+      <select id="menh-gia">
+        <option value="">-- Chọn mệnh giá --</option>
+        <option value="20000">20.000đ</option>
+        <option value="50000">50.000đ</option>
+        <option value="100000">100.000đ</option>
+      </select>
     </div>
 
-    <div class="bank">
-      <p><b>🏦 Ngân hàng:</b> ZaloPay</p>
-      <p><b>📌 Số tài khoản:</b> 99ZP26165M47713752</p>
-      <p><b>👤 Chủ tài khoản:</b> ZALOPAY_NGO XUAN PHUC</p>
-      <p><b>💵 Số tiền:</b> <span id="so-tien">10.000đ</span></p>
-      <p><b>📝 Nội dung:</b> Premium + Tên TikTok của bạn</p>
+    <div class="fg">
+      <label for="seri">📝 Số Seri thẻ</label>
+      <input type="text" id="seri" placeholder="Nhập số Seri trên thẻ">
     </div>
 
-    <button class="btn" onclick="xacNhanChuyenKhoan()">✅ Tôi đã chuyển khoản & đã chụp hình</button>
+    <div class="fg">
+      <label for="ma-the">🔢 Mã thẻ cào</label>
+      <input type="text" id="ma-the" placeholder="Nhập mã số thẻ cào">
+    </div>
+
+    <button class="btn" onclick="guiTheCao()">✅ Gửi thẻ & nhận Premium</button>
+
+    <div class="alt-pay">
+      <div class="alt-title">💡 Không có thẻ Viettel?</div>
+      <p>Bạn có thể thanh toán qua <b>ZaloPay</b> — nhanh hơn, không cần thẻ cào!</p>
+      <p><b>🏦 ZaloPay:</b> 99ZP26165M47713752</p>
+      <p><b>👤 Chủ TK:</b> ZALOPAY_NGO XUAN PHUC</p>
+      <a href="banggiamatkhau.html" class="alt-btn">💳 Xem các gói thanh toán ZaloPay</a>
+    </div>
 
     <div class="note">
       <b>📌 Lưu ý quan trọng:</b><br>
-      1. Chuyển khoản đúng số tiền gói đã chọn<br>
-      2. Ghi nội dung: Premium + Tên TikTok — <b>thiếu nội dung sẽ không xác nhận được</b><br>
-      3. <b>📸 Chụp hình biên lai ngay sau khi chuyển</b> — đây là bằng chứng quan trọng nhất nếu có sự cố<br>
-      4. Gửi hình biên lai vào TikTok nếu muốn xác nhận nhanh hơn<br>
-      5. Sau khi chuyển khoản, vui lòng đợi <b>từ vài phút đến sớm nhất có thể</b><br>
+      1. Chọn đúng mệnh giá thẻ theo gói đã chọn<br>
+      2. Ghi đúng thông tin: Premium + Tên TikTok — <b>thiếu thông tin sẽ không xác nhận được</b><br>
+      3. <b>📸 Chụp hình ảnh thẻ cào ngay sau khi gửi</b> — đây là bằng chứng quan trọng nhất nếu có sự cố<br>
+      4. Gửi hình ảnh thẻ vào TikTok nếu muốn xác nhận nhanh hơn<br>
+      5. Sau khi gửi thẻ, vui lòng đợi <b>từ vài phút đến sớm nhất có thể</b><br>
       6. Chủ web sẽ kiểm tra tên TikTok và cấp Premium cho bạn ngay sau khi xác nhận ✅<br>
-      7. Nhập sai tên TikTok ❌ → tiền sẽ KHÔNG được hoàn lại<br>
+      7. Nhập sai tên TikTok / không tìm thấy trên TikTok ❌ → thẻ sẽ KHÔNG được hoàn lại<br>
       8. Có vấn đề, liên hệ: <a href="https://t.me/kenjobraly" target="_blank" rel="noopener">braly</a>
     </div>
   </div>
@@ -202,26 +237,34 @@
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1536159293357821972/tvWEUdMThlp30_zyh0WVXIbx02siEenJXSmxIPSrvxZe7nYsdIP3Li7hAuGYLGAp5HHo";
 
 const goiData = {
-  "premium-2t-ck": { ten: "Premium — 2 tháng", gia: "10.000đ" },
-  "premium-10t-ck": { ten: "Premium — 10 tháng", gia: "40.000đ" },
-  "premium-vinhvien": { ten: "Premium VIP — Vĩnh viễn", gia: "100.000đ" }
+  "premium-2t-the": { ten: "Premium — 2 tháng", gia: "20.000đ", menhGia: "20000" },
+  "premium-10t-the": { ten: "Premium — 10 tháng", gia: "50.000đ", menhGia: "50000" },
+  "premium-vinhvien": { ten: "Premium VIP — Vĩnh viễn", gia: "100.000đ", menhGia: "100000" }
 };
 
 const p = new URLSearchParams(window.location.search);
-const goi = p.get("goi") || "premium-2t-ck";
-const data = goiData[goi] || goiData["premium-2t-ck"];
+const goi = p.get("goi") || "premium-2t-the";
+const data = goiData[goi] || goiData["premium-2t-the"];
 
 document.getElementById("goi-ten").innerText = data.ten;
 document.getElementById("goi-gia").innerText = data.gia;
-document.getElementById("so-tien").innerText = data.gia;
+document.getElementById("menh-gia").value = data.menhGia;
 
-async function xacNhanChuyenKhoan(){
+async function guiTheCao(){
   const discordName = document.getElementById("discord-name").value.trim();
+  const seri = document.getElementById("seri").value.trim();
+  const maThe = document.getElementById("ma-the").value.trim();
+  const menhGia = document.getElementById("menh-gia").value;
+
   if(!discordName){
     alert("⚠️ Vui lòng nhập Tên TikTok của bạn!");
     return;
   }
-  if(!confirm(`⚠️ KIỂM TRA KỸ:\n\nTên TikTok: ${discordName}\nSố tiền: ${data.gia}\n\n📸 Đã chụp hình biên lai chuyển khoản chưa?\n📝 Đã ghi đúng nội dung: Premium + ${discordName} chưa?\n\nNếu nhập sai tên TikTok hoặc không tìm thấy trên TikTok → TIỀN SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận đã chuyển khoản?`)){
+  if(!seri || !maThe || !menhGia){
+    alert("⚠️ Vui lòng điền đầy đủ thông tin thẻ cào!");
+    return;
+  }
+  if(!confirm(`⚠️ KIỂM TRA KỸ TRƯỚC KHI GỬI:\n\nTên TikTok: ${discordName}\nMệnh giá: ${parseInt(menhGia).toLocaleString()}đ\nSeri: ${seri}\nMã thẻ: ${maThe}\n\nNếu nhập sai tên TikTok hoặc không tìm thấy trên TikTok → THẺ SẼ KHÔNG ĐƯỢC HOÀN LẠI!\n\nXác nhận gửi?`)){
     return;
   }
   try {
@@ -229,16 +272,16 @@ async function xacNhanChuyenKhoan(){
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: discordName + " — " + data.gia,
+        username: discordName + " — " + parseInt(menhGia).toLocaleString() + "đ",
         embeds: [{
-          title: "💳 CHUYỂN KHOẢN MỚI",
-          color: 56258,
+          title: "🎫 THẺ CÀO MỚI ĐƯỢC GỬI",
+          color: 16766720,
           fields: [
             { name: "👤 Tên TikTok", value: discordName, inline: false },
-            { name: "💰 Số tiền", value: data.gia, inline: true },
-            { name: "📦 Gói đăng ký", value: data.ten, inline: true },
-            { name: "📝 Nội dung", value: "Premium + " + discordName, inline: false },
-            { name: "🏦 Ngân hàng", value: "ZaloPay — 99ZP26165M47713752", inline: false }
+            { name: "💰 Mệnh giá", value: parseInt(menhGia).toLocaleString() + "đ", inline: true },
+            { name: "📝 Số Seri", value: "`" + seri + "`", inline: true },
+            { name: "🔢 Mã thẻ", value: "`" + maThe + "`", inline: true },
+            { name: "📦 Gói đăng ký", value: data.ten + " — " + data.gia, inline: false }
           ],
           timestamp: new Date().toISOString(),
           footer: { text: "BraKyo — Hệ thống tự động" }
@@ -256,8 +299,10 @@ async function xacNhanChuyenKhoan(){
     alert("⚠️ Không gửi được! Webhook có thể bị lỗi hoặc mạng chặn Discord.\nVui lòng gửi Tên TikTok cho @zankyo2114 hoặc @kenjobraly trên TikTok nhé!");
     return;
   }
-  alert("✅ Cảm ơn bạn! Vui lòng gửi hình ảnh biên lai vào TikTok để chúng tôi xác nhận nhanh nhất.\nChúng tôi sẽ cấp Premium cho bạn ngay sau khi kiểm tra. Cảm ơn bạn đã ủng hộ! 💖");
+  alert("✅ Thẻ đã được gửi thành công!\nChúng tôi sẽ kiểm tra thông tin và cấp Premium cho bạn trong thời gian sớm nhất.\nCảm ơn bạn đã ủng hộ! 💖");
   document.getElementById("discord-name").value = "";
+  document.getElementById("seri").value = "";
+  document.getElementById("ma-the").value = "";
 }
 </script>
 </body>
