@@ -652,35 +652,62 @@ function t(key) {
 }
 
 /* ============================================================
-   PHÁT HIỆN NGƯỜI NƯỚC NGOÀI
-   - Ưu tiên: múi giờ + ngôn ngữ trình duyệt (nhanh, không gọi mạng)
-   - Chỉ khi mơ hồ mới gọi IP API (có timeout 2.5s)
+   PHÁT HIỆN NGƯỜI NƯỚC NGOÀI — LOGIC OR
+   Chỉ cần 1 trong 3 tín hiệu (TZ / Lang / IP) không phải VN
+   → coi là người nước ngoài ngay lập tức.
    ============================================================ */
 async function detectForeign() {
+  // (1) Múi giờ
   let tz = '';
   try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) {}
   const isVNTimezone = /ho_chi_minh|saigon/i.test(tz);
 
+  // (2) Ngôn ngữ trình duyệt
   const langs = [navigator.language, ...(navigator.languages || [])]
     .filter(Boolean).map(l => l.toLowerCase());
   const isVNLanguage = langs.some(l => l.startsWith('vi'));
 
-  // Nếu cả 2 tín hiệu đều rõ ràng → kết luận luôn
-  if (!isVNTimezone && !isVNLanguage) return true;
-  if (isVNTimezone && isVNLanguage) return false;
+  // (3) OR sớm — chỉ cần 1 tín hiệu TZ hoặc Lang không phải VN
+  if (!isVNTimezone || !isVNLanguage) return true;
 
-  // Mơ hồ → kiểm tra IP
+  // (4) Cả TZ và Lang đều VN → bắt buộc check IP để phát hiện fake IP (VPN)
+  //     Vẫn là OR: IP không phải VN → foreign
   try {
     const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 2500);
-    const res = await fetch('https://ipapi.co/json/', { cache: 'no-store', signal: ctrl.signal });
+    const to = setTimeout(() => ctrl.abort(), 3000);
+    const res = await fetch('https://ipapi.co/json/', {
+      cache: 'no-store',
+      signal: ctrl.signal
+    });
     clearTimeout(to);
     if (res.ok) {
       const d = await res.json();
-      return d.country_code !== 'VN';
+      if (d && d.country_code) {
+        if (d.country_code !== 'VN') return true;   // IP nước ngoài → foreign
+        return false;                                // IP VN → chắc chắn VN
+      }
+    }
+  } catch (_) { /* ipapi.co lỗi/bị chặn → thử fallback bên dưới */ }
+
+  // (5) Fallback: ipapi.co fail → thử ipwho.is
+  try {
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 3000);
+    const res = await fetch('https://ipwho.is/', {
+      cache: 'no-store',
+      signal: ctrl.signal
+    });
+    clearTimeout(to);
+    if (res.ok) {
+      const d = await res.json();
+      if (d && d.country_code) {
+        if (d.country_code !== 'VN') return true;
+        return false;
+      }
     }
   } catch (_) {}
-  // fallback: coi như VN nếu không xác định được
+
+  // (6) Không xác định được IP → coi như VN (an toàn)
   return false;
 }
 
