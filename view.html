@@ -521,6 +521,20 @@
   }
   .msg-err:empty { display: none; }
 
+  /* Thông báo mật khẩu hết hạn */
+  .msg-warn {
+    margin-bottom: 14px;
+    padding: 12px 16px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 10px;
+    color: #fbbf24;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    animation: shakeIn 0.4s ease-out;
+  }
+  .msg-warn strong { color: #fcd34d; }
+
   @keyframes shakeIn {
     0% { transform: translateX(-8px); opacity: 0; }
     25% { transform: translateX(8px); }
@@ -643,6 +657,10 @@ const TEXTS = {
   bumxSub:        { vi: 'Nhanh nhất · Ít bước hơn', en: 'Fastest · Fewer steps' },
   bbmktsSub:      { vi: 'Dự phòng khi link chính hết', en: 'Backup when main links run out' },
   linkforearnSub: { vi: 'Dự phòng · Cuối cùng', en: 'Backup · Last resort' },
+  tokenExpired:   {
+    vi: '<strong>Mật khẩu tạm thời đã hết hạn.</strong> Vui lòng nhập lại mật khẩu mới để lấy script.',
+    en: '<strong>Temporary password has expired.</strong> Please enter a new password to get the script.'
+  },
 };
 
 function t(key) {
@@ -652,67 +670,106 @@ function t(key) {
 }
 
 /* ============================================================
+   TOKEN PERSISTENCE (hỗ trợ hết hạn)
+   - Lưu: { token, savedAt, expiresAt }
+   - Tương thích ngược với token cũ (chuỗi thuần)
+   ============================================================ */
+const TOKEN_KEY = "token_" + id;
+
+function saveToken(token, expiresAt) {
+  try {
+    const payload = { token, savedAt: Date.now(), expiresAt: expiresAt || null };
+    localStorage.setItem(TOKEN_KEY, JSON.stringify(payload));
+  } catch (_) {}
+}
+
+function loadToken() {
+  try {
+    const raw = localStorage.getItem(TOKEN_KEY);
+    if (!raw) return null;
+    // Backward compat: format cũ là chuỗi thuần
+    if (raw[0] !== '{') return { token: raw, savedAt: null, expiresAt: null };
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.token) return null;
+    return parsed;
+  } catch (_) { return null; }
+}
+
+function clearToken() {
+  try { localStorage.removeItem(TOKEN_KEY); } catch (_) {}
+}
+
+/**
+ * Trích xuất mốc hết hạn từ response của server (nếu có).
+ * Chấp nhận nhiều kiểu tên field khác nhau.
+ * Trả về timestamp (ms) hoặc null.
+ */
+function extractExpiry(data) {
+  if (!data) return null;
+
+  // Field dạng "thời điểm" (timestamp / ISO string)
+  const abs = data.expiresAt || data.expires_at ||
+              data.passwordExpiresAt || data.password_expires_at ||
+              data.expiry || data.expiredAt || null;
+  if (abs) {
+    const n = typeof abs === 'number' ? abs : Date.parse(abs);
+    if (!isNaN(n)) return n < 1e12 ? n * 1000 : n;   // seconds → ms
+  }
+
+  // Field dạng "thời lượng" (giây)
+  const rel = data.expiresIn || data.expires_in ||
+              data.passwordExpiresIn || data.password_expires_in || null;
+  if (rel != null) {
+    const n = typeof rel === 'number' ? rel : parseInt(rel, 10);
+    if (!isNaN(n)) return Date.now() + n * 1000;
+  }
+
+  return null;
+}
+
+/* ============================================================
    PHÁT HIỆN NGƯỜI NƯỚC NGOÀI — LOGIC OR
-   Chỉ cần 1 trong 3 tín hiệu (TZ / Lang / IP) không phải VN
-   → coi là người nước ngoài ngay lập tức.
    ============================================================ */
 async function detectForeign() {
-  // (1) Múi giờ
   let tz = '';
   try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) {}
   const isVNTimezone = /ho_chi_minh|saigon/i.test(tz);
 
-  // (2) Ngôn ngữ trình duyệt
   const langs = [navigator.language, ...(navigator.languages || [])]
     .filter(Boolean).map(l => l.toLowerCase());
   const isVNLanguage = langs.some(l => l.startsWith('vi'));
 
-  // (3) OR sớm — chỉ cần 1 tín hiệu TZ hoặc Lang không phải VN
+  // OR: chỉ cần 1 trong 2 tín hiệu không phải VN → foreign ngay
   if (!isVNTimezone || !isVNLanguage) return true;
 
-  // (4) Cả TZ và Lang đều VN → bắt buộc check IP để phát hiện fake IP (VPN)
-  //     Vẫn là OR: IP không phải VN → foreign
+  // Cả 2 đều VN → check IP
   try {
     const ctrl = new AbortController();
     const to = setTimeout(() => ctrl.abort(), 3000);
-    const res = await fetch('https://ipapi.co/json/', {
-      cache: 'no-store',
-      signal: ctrl.signal
-    });
+    const res = await fetch('https://ipapi.co/json/', { cache: 'no-store', signal: ctrl.signal });
     clearTimeout(to);
     if (res.ok) {
       const d = await res.json();
-      if (d && d.country_code) {
-        if (d.country_code !== 'VN') return true;   // IP nước ngoài → foreign
-        return false;                                // IP VN → chắc chắn VN
-      }
-    }
-  } catch (_) { /* ipapi.co lỗi/bị chặn → thử fallback bên dưới */ }
-
-  // (5) Fallback: ipapi.co fail → thử ipwho.is
-  try {
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 3000);
-    const res = await fetch('https://ipwho.is/', {
-      cache: 'no-store',
-      signal: ctrl.signal
-    });
-    clearTimeout(to);
-    if (res.ok) {
-      const d = await res.json();
-      if (d && d.country_code) {
-        if (d.country_code !== 'VN') return true;
-        return false;
-      }
+      if (d && d.country_code) return d.country_code !== 'VN';
     }
   } catch (_) {}
 
-  // (6) Không xác định được IP → coi như VN (an toàn)
+  try {
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 3000);
+    const res = await fetch('https://ipwho.is/', { cache: 'no-store', signal: ctrl.signal });
+    clearTimeout(to);
+    if (res.ok) {
+      const d = await res.json();
+      if (d && d.country_code) return d.country_code !== 'VN';
+    }
+  } catch (_) {}
+
   return false;
 }
 
 /* ============================================================
-   DỊCH CÁC PHẦN HTML TĨNH (chỉ khi là user nước ngoài)
+   DỊCH CÁC PHẦN HTML TĨNH
    ============================================================ */
 function applyStaticTranslations() {
   if (!isForeign) return;
@@ -723,7 +780,6 @@ function applyStaticTranslations() {
   const sub = document.getElementById('subtitleText');
   if (sub) sub.textContent = t('subtitle');
 
-  // Ẩn bảng Premium
   const premium = document.getElementById('premiumCard');
   if (premium) premium.style.display = 'none';
 
@@ -741,14 +797,18 @@ function escapeHtml(s) {
   }[c]));
 }
 
-function showLoading() {
-  document.getElementById("loadingState").style.display = "block";
-  document.getElementById("contentArea").style.display = "none";
-}
-
 function hideLoading() {
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("contentArea").style.display = "block";
+}
+
+function showTokenExpiredNotice() {
+  const mainCard = document.getElementById('mainCard');
+  if (!mainCard) return;
+  const notice = document.createElement('div');
+  notice.className = 'msg-warn';
+  notice.innerHTML = t('tokenExpired');
+  mainCard.insertBefore(notice, mainCard.firstChild);
 }
 
 /* ============================================================
@@ -764,27 +824,45 @@ async function main() {
     return;
   }
 
-  // Thử token đã lưu
-  const saved = localStorage.getItem("token_" + id);
-  if (saved) {
-    try {
-      const r = await fetch(WORKER + "/api/reveal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: saved })
-      });
-      const data = await r.json();
-      if (data.success) {
-        hideLoading();
-        document.getElementById("title").textContent = t('yourScript');
-        reveal(data);
-        return;
+  // ===== Kiểm tra token đã lưu =====
+  let tokenExpiredNotice = false;
+  const saved = loadToken();
+
+  if (saved && saved.token) {
+    // (a) Nếu có expiresAt và đã quá hạn → không cần gọi server, xoá luôn
+    if (saved.expiresAt && Date.now() >= saved.expiresAt) {
+      clearToken();
+      tokenExpiredNotice = true;
+    } else {
+      // (b) Gọi reveal để xác nhận token còn sống
+      try {
+        const r = await fetch(WORKER + "/api/reveal", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: saved.token })
+        });
+
+        let data = null;
+        try { data = await r.json(); } catch (_) {}
+
+        if (r.ok && data && data.success) {
+          hideLoading();
+          document.getElementById("title").textContent = t('yourScript');
+          reveal(data);
+          return;
+        }
+
+        // Server phản hồi nhưng token không còn hiệu lực (rất có thể do
+        // mật khẩu tạm thời đã hết hạn) → xoá token đã lưu
+        clearToken();
+        tokenExpiredNotice = true;
+      } catch (_) {
+        // Lỗi mạng thật sự → GIỮ token, không hiện thông báo hết hạn
       }
-      localStorage.removeItem("token_" + id);
-    } catch (_) {}
+    }
   }
 
-  // Lấy info
+  // ===== Lấy info và hiển thị form =====
   try {
     const r = await fetch(WORKER + "/api/info/" + id);
     if (!r.ok) {
@@ -797,6 +875,8 @@ async function main() {
     document.getElementById("title").textContent = info.title;
     hideLoading();
     showMain(info.links || {});
+
+    if (tokenExpiredNotice) showTokenExpiredNotice();
   } catch (_) {
     document.getElementById("loadingState").innerHTML =
       `<p style="color:#fca5a5;">${t('connError')}</p>`;
@@ -805,7 +885,6 @@ async function main() {
 
 /* ============================================================
    RENDER MAIN CARD
-   - User nước ngoài: chỉ giữ link4m + bumx
    ============================================================ */
 function showMain(links) {
   const linkConfig = {
@@ -919,7 +998,11 @@ async function doVerify() {
     }
 
     if (remember && data.token) {
-      localStorage.setItem("token_" + id, data.token);
+      // Lưu token kèm thời điểm hết hạn (nếu server cung cấp)
+      saveToken(data.token, extractExpiry(data));
+    } else {
+      // Người dùng bỏ tick "Lưu cho lần sau" → xoá token cũ (nếu có)
+      clearToken();
     }
 
     reveal(data);
@@ -931,6 +1014,7 @@ async function doVerify() {
 }
 
 function reveal(data) {
+  // Xoá notice "mật khẩu hết hạn" (nếu có) — vì đã verify thành công
   document.getElementById("mainCard").innerHTML = "";
   const rc = document.getElementById("resultCard");
   rc.classList.add("active");
