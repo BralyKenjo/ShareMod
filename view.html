@@ -53,7 +53,6 @@
     animation: fadeInUp 0.6s ease-out;
   }
 
-  /* ===== LOGO ===== */
   .logo-wrap {
     display: flex;
     justify-content: center;
@@ -79,7 +78,6 @@
     50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 119, 255, 0.25); }
   }
 
-  /* ===== TITLE ===== */
   h1 {
     text-align: center;
     font-size: 1.75rem;
@@ -101,7 +99,6 @@
     animation: fadeInUp 0.5s ease-out 0.2s both;
   }
 
-  /* ===== CARD ===== */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -154,7 +151,6 @@
     line-height: 1.5;
   }
 
-  /* ===== WHY LIST (card "Tại sao nên chọn Premium?") ===== */
   .why-list {
     list-style: none;
     display: grid;
@@ -177,7 +173,6 @@
     margin-top: 1px;
   }
 
-  /* ===== LINK BUTTONS ===== */
   .link-btn {
     display: flex;
     align-items: center;
@@ -224,7 +219,6 @@
     transition: transform var(--transition);
   }
 
-  /* Link4M — nổi bật nhất */
   .link-btn.primary {
     background: linear-gradient(135deg, var(--blue), var(--cyan));
     border-color: transparent;
@@ -244,7 +238,6 @@
   .link-btn.primary:hover::after { transform: translateX(4px); }
   .link-btn.primary:active { transform: translateY(0) scale(0.99); }
 
-  /* Bumx — nổi bật vừa */
   .link-btn.secondary {
     background: rgba(0, 212, 255, 0.06);
     border-color: rgba(0, 212, 255, 0.4);
@@ -263,7 +256,6 @@
   .link-btn.secondary:hover::after { transform: translateX(4px); }
   .link-btn.secondary:active { transform: translateY(0) scale(0.99); }
 
-  /* Bbmkts, LinkForEarn — bình thường */
   .link-btn.normal {
     background: rgba(255, 255, 255, 0.02);
     border-color: var(--border);
@@ -279,7 +271,6 @@
   }
   .link-btn.normal:hover::after { transform: translateX(4px); color: var(--cyan); }
 
-  /* Dòng mô tả dưới cụm 4 nút */
   .links-footnote {
     margin-top: 14px;
     padding-top: 14px;
@@ -295,7 +286,6 @@
     font-weight: 600;
   }
 
-  /* ===== PASSWORD INPUT ===== */
   .pw-input-wrap {
     position: relative;
     margin-bottom: 12px;
@@ -339,7 +329,6 @@
   }
   .pw-toggle:hover { color: var(--cyan); }
 
-  /* ===== PRIMARY BUTTON ===== */
   .btn-primary {
     width: 100%;
     padding: 13px 20px;
@@ -380,7 +369,6 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ===== CHECKBOX ===== */
   .remember {
     display: flex;
     align-items: center;
@@ -422,7 +410,6 @@
     font-weight: 700;
   }
 
-  /* ===== CONTACT / SUPPORT ===== */
   .contact-box {
     text-align: center;
     margin-top: 16px;
@@ -448,7 +435,6 @@
     text-underline-offset: 3px;
   }
 
-  /* ===== RESULT ===== */
   #resultCard { display: none; }
   #resultCard.active { display: block; animation: fadeInUp 0.5s ease-out; }
 
@@ -523,7 +509,6 @@
   }
   .open-link::after { content: '↗'; font-size: 1rem; }
 
-  /* ===== ERROR ===== */
   .msg-err {
     margin-top: 12px;
     padding: 12px 16px;
@@ -544,7 +529,6 @@
     100% { transform: translateX(0); opacity: 1; }
   }
 
-  /* ===== LOADING ===== */
   .loading-state {
     text-align: center;
     padding: 60px 20px;
@@ -583,7 +567,7 @@
 <div class="container" id="app">
   <div class="loading-state" id="loadingState">
     <div class="spinner"></div>
-    Đang tải...
+    <span id="loadingText">Đang tải...</span>
   </div>
 
   <div id="contentArea" style="display:none;">
@@ -591,13 +575,13 @@
       <img src="IMG_1851.jpeg" alt="Logo" onerror="this.style.display='none'">
     </div>
     <h1 id="title">Đang tải...</h1>
-    <p class="subtitle">Chọn link bên dưới hoặc dùng mật khẩu để lấy script</p>
+    <p class="subtitle" id="subtitleText">Chọn link bên dưới hoặc dùng mật khẩu để lấy script</p>
 
     <div id="mainCard"></div>
     <div id="resultCard"></div>
 
-    <!-- ===== CARD: TẠI SAO NÊN CHỌN PREMIUM (CHUYỂN XUỐNG DƯỚI) ===== -->
-    <div class="card" style="animation-delay: 0.3s;">
+    <!-- ===== PREMIUM CARD (sẽ bị ẩn với user nước ngoài) ===== -->
+    <div class="card" id="premiumCard" style="animation-delay: 0.3s;">
       <h2>
         <span class="icon">💎</span> Tại sao nên chọn Premium?
       </h2>
@@ -608,15 +592,13 @@
         <li>Truy cập kho script chất lượng cao, được cập nhật liên tục</li>
         <li>Hỗ trợ trực tiếp qua TikTok khi có vấn đề phát sinh</li>
       </ul>
-      
-      <!-- NÚT DẪN ĐẾN BẢNG GIÁ PREMIUM -->
       <div style="margin-top: 18px;">
         <a href="banggiamatkhau.html" class="btn-primary" style="display: flex; justify-content: center; align-items: center; text-decoration: none;">
           💳 Xem bảng giá Premium
         </a>
       </div>
     </div>
-    
+
   </div>
 </div>
 
@@ -624,6 +606,108 @@
 const WORKER = "https://automatic.phucpro4211.workers.dev";
 const id = new URLSearchParams(location.search).get("id");
 
+/* ============================================================
+   STATE + i18n
+   ============================================================ */
+let isForeign = false;
+
+const TEXTS = {
+  loading:        { vi: 'Đang tải...', en: 'Loading...' },
+  subtitle:       { vi: 'Chọn link bên dưới hoặc dùng mật khẩu để lấy script', en: 'Choose a link below or use a password to get the script' },
+  yourScript:     { vi: 'Script của bạn', en: 'Your script' },
+  idNotFound:     { vi: 'ID không tồn tại hoặc đã bị xoá.', en: 'ID does not exist or has been deleted.' },
+  connError:      { vi: 'Lỗi kết nối. Vui lòng thử lại.', en: 'Connection error. Please try again.' },
+  missingId:      { vi: 'Thiếu ID trên URL.', en: 'Missing ID in URL.' },
+  getFreeScript:  { vi: 'Lấy script miễn phí', en: 'Get free script' },
+  chooseLink:     { vi: 'Chọn 1 trong các link dưới để lấy script:', en: 'Choose one of the links below to get the script:' },
+  footnote:       {
+    vi: 'Sau khi vượt link, bạn sẽ được chuyển tới script.<br>Link <strong>Link4M</strong> được khuyên dùng — nếu link không hoạt động, thử <strong>Bumx</strong>.',
+    en: 'After bypassing the shortlink, you will be redirected to the script.<br><strong>Link4M</strong> is recommended — if it does not work, try <strong>Bumx</strong>.'
+  },
+  enterPassword:  { vi: 'Nhập mật khẩu', en: 'Enter password' },
+  pwDesc:         { vi: 'Nhập mật khẩu để lấy script, không cần vượt link', en: 'Enter password to get the script — no shortlink bypass needed' },
+  pwPlaceholder:  { vi: 'Nhập mật khẩu để lấy ngay', en: 'Enter password to get it now' },
+  saveForNext:    { vi: 'Lưu cho lần sau', en: 'Save for next time' },
+  verify:         { vi: 'Xác minh', en: 'Verify' },
+  contactPrefix:  { vi: 'Nếu chưa có mật khẩu hãy liên hệ', en: 'If you do not have a password, contact' },
+  or:             { vi: 'hoặc', en: 'or' },
+  toBuy:          { vi: 'để mua', en: 'to buy' },
+  copy:           { vi: 'Sao chép', en: 'Copy' },
+  copied:         { vi: 'Đã sao chép ✓', en: 'Copied ✓' },
+  originalLink:   { vi: 'Link gốc', en: 'Original link' },
+  clickToOpen:    { vi: 'Bấm vào nút để mở tab:', en: 'Click the button to open in a new tab:' },
+  openOriginal:   { vi: 'Mở link gốc', en: 'Open original link' },
+  wrongPassword:  { vi: 'Sai mật khẩu', en: 'Wrong password' },
+  script:         { vi: 'Script', en: 'Script' },
+  link4mSub:      { vi: 'Khuyên dùng · Nhanh & ổn định', en: 'Recommended · Fast & stable' },
+  bumxSub:        { vi: 'Nhanh nhất · Ít bước hơn', en: 'Fastest · Fewer steps' },
+  bbmktsSub:      { vi: 'Dự phòng khi link chính hết', en: 'Backup when main links run out' },
+  linkforearnSub: { vi: 'Dự phòng · Cuối cùng', en: 'Backup · Last resort' },
+};
+
+function t(key) {
+  const entry = TEXTS[key];
+  if (!entry) return key;
+  return entry[isForeign ? 'en' : 'vi'];
+}
+
+/* ============================================================
+   PHÁT HIỆN NGƯỜI NƯỚC NGOÀI
+   - Ưu tiên: múi giờ + ngôn ngữ trình duyệt (nhanh, không gọi mạng)
+   - Chỉ khi mơ hồ mới gọi IP API (có timeout 2.5s)
+   ============================================================ */
+async function detectForeign() {
+  let tz = '';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) {}
+  const isVNTimezone = /ho_chi_minh|saigon/i.test(tz);
+
+  const langs = [navigator.language, ...(navigator.languages || [])]
+    .filter(Boolean).map(l => l.toLowerCase());
+  const isVNLanguage = langs.some(l => l.startsWith('vi'));
+
+  // Nếu cả 2 tín hiệu đều rõ ràng → kết luận luôn
+  if (!isVNTimezone && !isVNLanguage) return true;
+  if (isVNTimezone && isVNLanguage) return false;
+
+  // Mơ hồ → kiểm tra IP
+  try {
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch('https://ipapi.co/json/', { cache: 'no-store', signal: ctrl.signal });
+    clearTimeout(to);
+    if (res.ok) {
+      const d = await res.json();
+      return d.country_code !== 'VN';
+    }
+  } catch (_) {}
+  // fallback: coi như VN nếu không xác định được
+  return false;
+}
+
+/* ============================================================
+   DỊCH CÁC PHẦN HTML TĨNH (chỉ khi là user nước ngoài)
+   ============================================================ */
+function applyStaticTranslations() {
+  if (!isForeign) return;
+
+  const lt = document.getElementById('loadingText');
+  if (lt) lt.textContent = t('loading');
+
+  const sub = document.getElementById('subtitleText');
+  if (sub) sub.textContent = t('subtitle');
+
+  // Ẩn bảng Premium
+  const premium = document.getElementById('premiumCard');
+  if (premium) premium.style.display = 'none';
+
+  if (document.title === 'Đang tải...' || !document.title) {
+    document.title = t('loading');
+  }
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -640,13 +724,20 @@ function hideLoading() {
   document.getElementById("contentArea").style.display = "block";
 }
 
+/* ============================================================
+   MAIN
+   ============================================================ */
 async function main() {
+  isForeign = await detectForeign();
+  applyStaticTranslations();
+
   if (!id) {
     document.getElementById("loadingState").innerHTML =
-      '<p style="color:#fca5a5;">Thiếu ID trên URL.</p>';
+      `<p style="color:#fca5a5;">${t('missingId')}</p>`;
     return;
   }
 
+  // Thử token đã lưu
   const saved = localStorage.getItem("token_" + id);
   if (saved) {
     try {
@@ -658,19 +749,20 @@ async function main() {
       const data = await r.json();
       if (data.success) {
         hideLoading();
-        document.getElementById("title").textContent = "Script của bạn";
+        document.getElementById("title").textContent = t('yourScript');
         reveal(data);
         return;
       }
       localStorage.removeItem("token_" + id);
-    } catch {}
+    } catch (_) {}
   }
 
+  // Lấy info
   try {
     const r = await fetch(WORKER + "/api/info/" + id);
     if (!r.ok) {
       document.getElementById("loadingState").innerHTML =
-        '<p style="color:#fca5a5;">ID không tồn tại hoặc đã bị xoá.</p>';
+        `<p style="color:#fca5a5;">${t('idNotFound')}</p>`;
       return;
     }
     const info = await r.json();
@@ -678,28 +770,37 @@ async function main() {
     document.getElementById("title").textContent = info.title;
     hideLoading();
     showMain(info.links || {});
-  } catch {
+  } catch (_) {
     document.getElementById("loadingState").innerHTML =
-      '<p style="color:#fca5a5;">Lỗi kết nối. Vui lòng thử lại.</p>';
+      `<p style="color:#fca5a5;">${t('connError')}</p>`;
   }
 }
 
+/* ============================================================
+   RENDER MAIN CARD
+   - User nước ngoài: chỉ giữ link4m + bumx
+   ============================================================ */
 function showMain(links) {
   const linkConfig = {
-    link4m:      { label: "Link4M",      sub: "Khuyên dùng · Nhanh & ổn định", cls: "primary"   },
-    bumx:        { label: "Bumx",        sub: "Nhanh nhất · Ít bước hơn",      cls: "secondary" },
-    bbmkts:      { label: "Bbmkts",      sub: "Dự phòng khi link chính hết",   cls: "normal"    },
-    linkforearn: { label: "LinkForEarn", sub: "Dự phòng · Cuối cùng",          cls: "normal"    }
+    link4m:      { label: "Link4M",      subKey: 'link4mSub',      cls: "primary"   },
+    bumx:        { label: "Bumx",        subKey: 'bumxSub',        cls: "secondary" },
+    bbmkts:      { label: "Bbmkts",      subKey: 'bbmktsSub',      cls: "normal"    },
+    linkforearn: { label: "LinkForEarn", subKey: 'linkforearnSub', cls: "normal"    }
   };
 
-  const linkBtns = Object.entries(linkConfig).map(([k, cfg]) => {
+  const allowedKeys = isForeign
+    ? ['link4m', 'bumx']
+    : Object.keys(linkConfig);
+
+  const linkBtns = allowedKeys.map(k => {
+    const cfg = linkConfig[k];
     const u = links[k];
     if (!u) return "";
     return `
       <button class="link-btn ${cfg.cls}" onclick="window.open('${escapeHtml(u)}','_blank')">
         <span class="btn-content">
           <span class="btn-label">${escapeHtml(cfg.label)}</span>
-          ${cfg.sub ? `<span class="btn-sub">${escapeHtml(cfg.sub)}</span>` : ""}
+          <span class="btn-sub">${escapeHtml(t(cfg.subKey))}</span>
         </span>
       </button>`;
   }).join("");
@@ -710,46 +811,46 @@ function showMain(links) {
     ${hasLinks ? `
       <div class="card">
         <h2>
-          <span class="icon">⚡</span> Lấy script miễn phí
+          <span class="icon">⚡</span> ${t('getFreeScript')}
         </h2>
-        <p class="card-desc">Chọn 1 trong các link dưới để lấy script:</p>
+        <p class="card-desc">${t('chooseLink')}</p>
         ${linkBtns}
-        <p class="links-footnote">
-          Sau khi vượt link, bạn sẽ được chuyển tới script.<br>
-          Link <strong>Link4M</strong> được khuyên dùng — nếu link không hoạt động, thử <strong>Bumx</strong>.
-        </p>
+        <p class="links-footnote">${t('footnote')}</p>
       </div>
     ` : ""}
 
     <div class="card">
       <h2>
-        <span class="icon">🔑</span> Nhập mật khẩu
+        <span class="icon">🔑</span> ${t('enterPassword')}
       </h2>
-      <p class="card-desc">Nhập mật khẩu để lấy script, không cần vượt link</p>
+      <p class="card-desc">${t('pwDesc')}</p>
       <div class="pw-input-wrap">
-        <input type="password" id="pw" placeholder="Nhập mật khẩu để lấy ngay" autocomplete="off">
+        <input type="password" id="pw" placeholder="${escapeHtml(t('pwPlaceholder'))}" autocomplete="off">
         <button class="pw-toggle" type="button" onclick="togglePw()" id="pwToggle">👁</button>
       </div>
       <label class="remember">
         <input type="checkbox" id="remember">
-        Lưu cho lần sau
+        ${t('saveForNext')}
       </label>
       <button class="btn-primary" id="verifyBtn" onclick="doVerify()">
-        Xác minh
+        ${t('verify')}
       </button>
       <div class="msg-err" id="pwMsg"></div>
 
       <div class="contact-box">
-        Nếu chưa có mật khẩu hãy liên hệ
+        ${t('contactPrefix')}
         <a href="https://www.tiktok.com/@zankyo2114" target="_blank" rel="noopener">@zankyo2114</a>
-        hoặc
+        ${t('or')}
         <a href="https://www.tiktok.com/@kenjobraly" target="_blank" rel="noopener">@kenjobraly</a>
-        để mua
+        ${t('toBuy')}
       </div>
     </div>
   `;
 }
 
+/* ============================================================
+   VERIFY + REVEAL + COPY
+   ============================================================ */
 function togglePw() {
   const inp = document.getElementById("pw");
   const btn = document.getElementById("pwToggle");
@@ -784,7 +885,7 @@ async function doVerify() {
     const data = await r.json();
 
     if (!r.ok) {
-      msg.textContent = data.error || "Sai mật khẩu";
+      msg.textContent = data.error || t('wrongPassword');
       btn.classList.remove("loading");
       btn.disabled = false;
       return;
@@ -795,8 +896,8 @@ async function doVerify() {
     }
 
     reveal(data);
-  } catch {
-    msg.textContent = "Lỗi kết nối. Vui lòng thử lại.";
+  } catch (_) {
+    msg.textContent = t('connError');
     btn.classList.remove("loading");
     btn.disabled = false;
   }
@@ -811,8 +912,8 @@ function reveal(data) {
     rc.innerHTML = `
       <div class="card">
         <div class="script-header">
-          <h2><span class="icon">📜</span> Script</h2>
-          <button class="btn-copy" id="copyBtn" onclick="copyScript()">Sao chép</button>
+          <h2><span class="icon">📜</span> ${t('script')}</h2>
+          <button class="btn-copy" id="copyBtn" onclick="copyScript()">${t('copy')}</button>
         </div>
         <pre id="scriptBox">${escapeHtml(data.content)}</pre>
       </div>
@@ -820,10 +921,10 @@ function reveal(data) {
   } else {
     rc.innerHTML = `
       <div class="card">
-        <h2><span class="icon">🔗</span> Link gốc</h2>
-        <p class="card-desc">Bấm vào nút để mở tab:</p>
+        <h2><span class="icon">🔗</span> ${t('originalLink')}</h2>
+        <p class="card-desc">${t('clickToOpen')}</p>
         <a class="open-link" href="${escapeHtml(data.content)}" target="_blank" rel="noopener">
-          Mở link gốc
+          ${t('openOriginal')}
         </a>
       </div>
     `;
@@ -841,10 +942,10 @@ function copyScript() {
   const btn = document.getElementById("copyBtn");
 
   const done = () => {
-    btn.textContent = "Đã sao chép ✓";
+    btn.textContent = t('copied');
     btn.classList.add("copied");
     setTimeout(() => {
-      btn.textContent = "Sao chép";
+      btn.textContent = t('copy');
       btn.classList.remove("copied");
     }, 2000);
   };
