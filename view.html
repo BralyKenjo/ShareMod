@@ -344,6 +344,7 @@
     position: relative;
     overflow: hidden;
     letter-spacing: 0.02em;
+    margin-top: 14px;
   }
 
   .btn-primary:hover {
@@ -368,47 +369,6 @@
     animation: spin 0.6s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .remember {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 12px 0;
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .remember input[type="checkbox"] {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background: var(--bg);
-    cursor: pointer;
-    position: relative;
-    transition: all var(--transition);
-    flex-shrink: 0;
-  }
-
-  .remember input[type="checkbox"]:checked {
-    background: linear-gradient(135deg, var(--blue), var(--cyan));
-    border-color: var(--cyan);
-  }
-
-  .remember input[type="checkbox"]:checked::after {
-    content: '✓';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    color: #fff;
-    font-weight: 700;
-  }
 
   .contact-box {
     text-align: center;
@@ -521,20 +481,6 @@
   }
   .msg-err:empty { display: none; }
 
-  /* Thông báo mật khẩu hết hạn */
-  .msg-warn {
-    margin-bottom: 14px;
-    padding: 12px 16px;
-    background: rgba(251, 191, 36, 0.08);
-    border: 1px solid rgba(251, 191, 36, 0.35);
-    border-radius: 10px;
-    color: #fbbf24;
-    font-size: 0.82rem;
-    line-height: 1.5;
-    animation: shakeIn 0.4s ease-out;
-  }
-  .msg-warn strong { color: #fcd34d; }
-
   @keyframes shakeIn {
     0% { transform: translateX(-8px); opacity: 0; }
     25% { transform: translateX(8px); }
@@ -641,7 +587,6 @@ const TEXTS = {
   enterPassword:  { vi: 'Nhập mật khẩu', en: 'Enter password' },
   pwDesc:         { vi: 'Nhập mật khẩu để lấy script, không cần vượt link', en: 'Enter password to get the script — no shortlink bypass needed' },
   pwPlaceholder:  { vi: 'Nhập mật khẩu để lấy ngay', en: 'Enter password to get it now' },
-  saveForNext:    { vi: 'Lưu cho lần sau', en: 'Save for next time' },
   verify:         { vi: 'Xác minh', en: 'Verify' },
   contactPrefix:  { vi: 'Nếu chưa có mật khẩu hãy liên hệ', en: 'If you do not have a password, contact' },
   or:             { vi: 'hoặc', en: 'or' },
@@ -657,74 +602,12 @@ const TEXTS = {
   bumxSub:        { vi: 'Nhanh nhất · Ít bước hơn', en: 'Fastest · Fewer steps' },
   bbmktsSub:      { vi: 'Dự phòng khi link chính hết', en: 'Backup when main links run out' },
   linkforearnSub: { vi: 'Dự phòng · Cuối cùng', en: 'Backup · Last resort' },
-  tokenExpired:   {
-    vi: '<strong>Mật khẩu tạm thời đã hết hạn.</strong> Vui lòng nhập lại mật khẩu mới để lấy script.',
-    en: '<strong>Temporary password has expired.</strong> Please enter a new password to get the script.'
-  },
 };
 
 function t(key) {
   const entry = TEXTS[key];
   if (!entry) return key;
   return entry[isForeign ? 'en' : 'vi'];
-}
-
-/* ============================================================
-   TOKEN PERSISTENCE (hỗ trợ hết hạn)
-   - Lưu: { token, savedAt, expiresAt }
-   - Tương thích ngược với token cũ (chuỗi thuần)
-   ============================================================ */
-const TOKEN_KEY = "token_" + id;
-
-function saveToken(token, expiresAt) {
-  try {
-    const payload = { token, savedAt: Date.now(), expiresAt: expiresAt || null };
-    localStorage.setItem(TOKEN_KEY, JSON.stringify(payload));
-  } catch (_) {}
-}
-
-function loadToken() {
-  try {
-    const raw = localStorage.getItem(TOKEN_KEY);
-    if (!raw) return null;
-    // Backward compat: format cũ là chuỗi thuần
-    if (raw[0] !== '{') return { token: raw, savedAt: null, expiresAt: null };
-    const parsed = JSON.parse(raw);
-    if (!parsed || !parsed.token) return null;
-    return parsed;
-  } catch (_) { return null; }
-}
-
-function clearToken() {
-  try { localStorage.removeItem(TOKEN_KEY); } catch (_) {}
-}
-
-/**
- * Trích xuất mốc hết hạn từ response của server (nếu có).
- * Chấp nhận nhiều kiểu tên field khác nhau.
- * Trả về timestamp (ms) hoặc null.
- */
-function extractExpiry(data) {
-  if (!data) return null;
-
-  // Field dạng "thời điểm" (timestamp / ISO string)
-  const abs = data.expiresAt || data.expires_at ||
-              data.passwordExpiresAt || data.password_expires_at ||
-              data.expiry || data.expiredAt || null;
-  if (abs) {
-    const n = typeof abs === 'number' ? abs : Date.parse(abs);
-    if (!isNaN(n)) return n < 1e12 ? n * 1000 : n;   // seconds → ms
-  }
-
-  // Field dạng "thời lượng" (giây)
-  const rel = data.expiresIn || data.expires_in ||
-              data.passwordExpiresIn || data.password_expires_in || null;
-  if (rel != null) {
-    const n = typeof rel === 'number' ? rel : parseInt(rel, 10);
-    if (!isNaN(n)) return Date.now() + n * 1000;
-  }
-
-  return null;
 }
 
 /* ============================================================
@@ -802,15 +685,6 @@ function hideLoading() {
   document.getElementById("contentArea").style.display = "block";
 }
 
-function showTokenExpiredNotice() {
-  const mainCard = document.getElementById('mainCard');
-  if (!mainCard) return;
-  const notice = document.createElement('div');
-  notice.className = 'msg-warn';
-  notice.innerHTML = t('tokenExpired');
-  mainCard.insertBefore(notice, mainCard.firstChild);
-}
-
 /* ============================================================
    MAIN
    ============================================================ */
@@ -824,45 +698,7 @@ async function main() {
     return;
   }
 
-  // ===== Kiểm tra token đã lưu =====
-  let tokenExpiredNotice = false;
-  const saved = loadToken();
-
-  if (saved && saved.token) {
-    // (a) Nếu có expiresAt và đã quá hạn → không cần gọi server, xoá luôn
-    if (saved.expiresAt && Date.now() >= saved.expiresAt) {
-      clearToken();
-      tokenExpiredNotice = true;
-    } else {
-      // (b) Gọi reveal để xác nhận token còn sống
-      try {
-        const r = await fetch(WORKER + "/api/reveal", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: saved.token })
-        });
-
-        let data = null;
-        try { data = await r.json(); } catch (_) {}
-
-        if (r.ok && data && data.success) {
-          hideLoading();
-          document.getElementById("title").textContent = t('yourScript');
-          reveal(data);
-          return;
-        }
-
-        // Server phản hồi nhưng token không còn hiệu lực (rất có thể do
-        // mật khẩu tạm thời đã hết hạn) → xoá token đã lưu
-        clearToken();
-        tokenExpiredNotice = true;
-      } catch (_) {
-        // Lỗi mạng thật sự → GIỮ token, không hiện thông báo hết hạn
-      }
-    }
-  }
-
-  // ===== Lấy info và hiển thị form =====
+  // Luôn yêu cầu nhập mật khẩu — không kiểm tra token đã lưu
   try {
     const r = await fetch(WORKER + "/api/info/" + id);
     if (!r.ok) {
@@ -875,8 +711,6 @@ async function main() {
     document.getElementById("title").textContent = info.title;
     hideLoading();
     showMain(info.links || {});
-
-    if (tokenExpiredNotice) showTokenExpiredNotice();
   } catch (_) {
     document.getElementById("loadingState").innerHTML =
       `<p style="color:#fca5a5;">${t('connError')}</p>`;
@@ -885,6 +719,7 @@ async function main() {
 
 /* ============================================================
    RENDER MAIN CARD
+   - User nước ngoài: chỉ giữ link4m + bumx
    ============================================================ */
 function showMain(links) {
   const linkConfig = {
@@ -934,10 +769,6 @@ function showMain(links) {
         <input type="password" id="pw" placeholder="${escapeHtml(t('pwPlaceholder'))}" autocomplete="off">
         <button class="pw-toggle" type="button" onclick="togglePw()" id="pwToggle">👁</button>
       </div>
-      <label class="remember">
-        <input type="checkbox" id="remember">
-        ${t('saveForNext')}
-      </label>
       <button class="btn-primary" id="verifyBtn" onclick="doVerify()">
         ${t('verify')}
       </button>
@@ -972,7 +803,6 @@ function togglePw() {
 
 async function doVerify() {
   const pw = document.getElementById("pw").value.trim();
-  const remember = document.getElementById("remember").checked;
   const msg = document.getElementById("pwMsg");
   const btn = document.getElementById("verifyBtn");
 
@@ -997,14 +827,7 @@ async function doVerify() {
       return;
     }
 
-    if (remember && data.token) {
-      // Lưu token kèm thời điểm hết hạn (nếu server cung cấp)
-      saveToken(data.token, extractExpiry(data));
-    } else {
-      // Người dùng bỏ tick "Lưu cho lần sau" → xoá token cũ (nếu có)
-      clearToken();
-    }
-
+    // Luôn hiển thị kết quả — không lưu token
     reveal(data);
   } catch (_) {
     msg.textContent = t('connError');
@@ -1014,7 +837,6 @@ async function doVerify() {
 }
 
 function reveal(data) {
-  // Xoá notice "mật khẩu hết hạn" (nếu có) — vì đã verify thành công
   document.getElementById("mainCard").innerHTML = "";
   const rc = document.getElementById("resultCard");
   rc.classList.add("active");
