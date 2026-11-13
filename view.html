@@ -256,20 +256,37 @@
   .link-btn.secondary:hover::after { transform: translateX(4px); }
   .link-btn.secondary:active { transform: translateY(0) scale(0.99); }
 
+  /* Đã tối ưu cho BBMKTS và LinkForEarn */
   .link-btn.normal {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: var(--border);
-    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: var(--text);
     font-weight: 500;
   }
-  .link-btn.normal .btn-label { font-weight: 500; }
-  .link-btn.normal::after { color: var(--text-dim); }
-  .link-btn.normal:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(0, 212, 255, 0.2);
-    color: var(--text);
+  .link-btn.normal .btn-label {
+    font-weight: 600;
+    color: #f0f6fc;
   }
-  .link-btn.normal:hover::after { transform: translateX(4px); color: var(--cyan); }
+  .link-btn.normal .btn-sub {
+    color: var(--text-dim);
+    opacity: 0.85;
+  }
+  .link-btn.normal::after {
+    color: var(--text-dim);
+  }
+  .link-btn.normal:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.35);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+  .link-btn.normal:hover::after {
+    transform: translateX(4px);
+    color: var(--cyan);
+  }
+  .link-btn.normal:active {
+    transform: translateY(0) scale(0.99);
+  }
 
   .links-footnote {
     margin-top: 14px;
@@ -622,10 +639,8 @@ async function detectForeign() {
     .filter(Boolean).map(l => l.toLowerCase());
   const isVNLanguage = langs.some(l => l.startsWith('vi'));
 
-  // OR: chỉ cần 1 trong 2 tín hiệu không phải VN → foreign ngay
   if (!isVNTimezone || !isVNLanguage) return true;
 
-  // Cả 2 đều VN → check IP
   try {
     const ctrl = new AbortController();
     const to = setTimeout(() => ctrl.abort(), 3000);
@@ -698,7 +713,6 @@ async function main() {
     return;
   }
 
-  // Luôn yêu cầu nhập mật khẩu — không kiểm tra token đã lưu
   try {
     const r = await fetch(WORKER + "/api/info/" + id);
     if (!r.ok) {
@@ -827,7 +841,6 @@ async function doVerify() {
       return;
     }
 
-    // Luôn hiển thị kết quả — không lưu token
     reveal(data);
   } catch (_) {
     msg.textContent = t('connError');
